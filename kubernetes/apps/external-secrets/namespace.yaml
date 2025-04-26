@@ -5,6 +5,29 @@ metadata:
   name: external-secrets
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sops-age
+stringData:
+  age.agekey: ENC[AES256_GCM,data:DuRmlRD1GZf1RjdMfadGnsUKCOmpNjJn42EShIV/Mimnzjb5EOMV5uDiLczZscDs1WAlFZvrDIJ6bEEXVfkKLg0H/leLCdd6tcg=,iv:krsUUMh5MA3h1yLmezwSauAsz9xdXxjQpdsRCmdxIcQ=,tag:VKUSz0egsok/YaZQcvhUxA==,type:str]
+sops:
+  age:
+    - recipient: age1gm4pzyutmqq4g38e32xjf2re7hq5m0nfuymstvwy3hp9xzgwkg7qu6vwc7
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUYWtGVlZQMG0wYWJpTmR2
+        b0pCa3BlYVZTYUhzYklINGcwTC9pSStCbW1zCmN0UzdKOEhZM1FSVE1NQ212YTBD
+        eDRQT1B4TVhMQ1QyM3ZDM2c1T1VUWWMKLS0tIEZpMmpxNkpIUUZLMGw2b3lJWlhQ
+        QjZFLzJubDFNcmR3czA2b2tMb2FRcDQKR77B5/8giBed3StMQN4LUqg7lf9j+sGt
+        vcYDRYthnunj/LkeYlGg6HHJUofS6WiyC2dt6t8Ns1XmU1/pyHnRbg==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-04-26T10:49:48Z"
+  mac: ENC[AES256_GCM,data:ek3mcub+dTWr7FKMpxvDGcUJOkA33soJZi2WEG7V5yIeEKhUq2hdn6r/qsNgks7p431qL8VT5xvsRDWRr0GOvCFoceeC7iXZHqUiQkVqLzYRNzQyp6ud4jFF3LBxBHjH2CCorhv8U4V4IBAaC2edSp/64u2n5HoQ/DreOwVGLJU=,iv:6S1IHfqinAUb4qocg/Aqq0JsfZ7GtfphPHbDCHWZAn4=,tag:JQTHGqmPBPsOQVhD9b0BQg==,type:str]
+  encrypted_regex: ^(data|stringData)$
+  mac_only_encrypted: true
+  version: 3.10.2
 # ---
 # # yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/notification.toolkit.fluxcd.io/provider_v1beta3.json
 # apiVersion: notification.toolkit.fluxcd.io/v1beta3

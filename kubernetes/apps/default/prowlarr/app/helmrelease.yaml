@@ -87,6 +87,9 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: prowlarr
+        enabled: true
+        size: 1Gi
+        storageClass: ceph-block  # Uncomment and set if you want a specific storage class
+        accessMode: ReadWriteOnce        # Optional, default is usually fine
       tmp:
         type: emptyDir

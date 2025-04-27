@@ -40,7 +40,7 @@ spec:
       GF_EXPLORE_ENABLED: true
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
-      GF_SERVER_ROOT_URL: https://grafana.devbu.io
+      GF_SERVER_ROOT_URL: https://grafana.npmulder.dev
     grafana.ini:
       analytics:
         check_for_updates: false
@@ -95,11 +95,6 @@ spec:
               path: /var/lib/grafana/dashboards/default
     dashboards:
       default:
-        apc-ups:
-          # renovate: depName="APC UPS (SNMP)"
-          gnetId: 12340
-          revision: 1
-          datasource: Prometheus
         ceph-cluster:
           # renovate: depName="Ceph Cluster"
           gnetId: 2842
@@ -126,18 +121,6 @@ spec:
           revision: 6
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
-        emqx:
-          # renovate: depName="EMQX"
-          gnetId: 17446
-          revision: 2
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
-        envoy:
-           # renovate: depName="Envoy Proxy Monitoring gRPC"
-           gnetId: 23239
-           revision: 1
-           datasource:
-             - { name: DS_AFRANET_PROMETHEUS, value: Prometheus }
         external-dns:
           # renovate: depName="External-dns"
           gnetId: 15038
@@ -191,12 +174,12 @@ spec:
           gnetId: 19105
           revision: 7
           datasource: Prometheus
-        smartctl-exporter:
-          # renovate: depName="SMARTctl Exporter Dashboard"
-          gnetId: 22604
-          revision: 2
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
+        # smartctl-exporter:
+        #   # renovate: depName="SMARTctl Exporter Dashboard"
+        #   gnetId: 22604
+        #   revision: 2
+        #   datasource:
+        #     - { name: DS_PROMETHEUS, value: Prometheus }
         unifi-insights:
           # renovate: depName="UniFi-Poller: Client Insights - Prometheus"
           gnetId: 11315
@@ -206,16 +189,6 @@ spec:
           # renovate: depName="UniFi-Poller: Network Sites - Prometheus"
           gnetId: 11311
           revision: 5
-          datasource: Prometheus
-        unifi-uap:
-          # renovate: depName="UniFi-Poller: UAP Insights - Prometheus"
-          gnetId: 11314
-          revision: 10
-          datasource: Prometheus
-        unifi-usw:
-          # renovate: depName="UniFi-Poller: USW Insights - Prometheus"
-          gnetId: 11312
-          revision: 9
           datasource: Prometheus
         volsync:
           # renovate: depName="VolSync Dashboard"

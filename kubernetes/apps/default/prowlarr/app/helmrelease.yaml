@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app gatus
+  name: &app prowlarr
 spec:
   interval: 1h
   chartRef:
@@ -18,44 +18,34 @@ spec:
       retries: 3
   values:
     controllers:
-      gatus:
+      prowlarr:
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-config:
-            image:
-              repository: ghcr.io/home-operations/k8s-sidecar
-              tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
-            env:
-              FOLDER: /config
-              LABEL: gatus.io/enabled
-              NAMESPACE: ALL
-              RESOURCE: both
-              UNIQUE_FILENAMES: true
-              METHOD: WATCH
-            restartPolicy: Always
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 128Mi
         containers:
           app:
             image:
-              repository: ghcr.io/twin/gatus
-              tag: v5.17.0@sha256:a8c53f9e9f1a3876cd00e44a42c80fc984e118d5ba0bdbaf08980cb627d61512
+              repository: ghcr.io/home-operations/prowlarr
+              tag: 1.34.1.5021@sha256:8194af3c8a4fa4e6605d51c6ace4b8a40e199897a1dbf6f770c2a05970a8ba87
             env:
+              PROWLARR__APP__INSTANCENAME: Prowlarr
+              PROWLARR__APP__THEME: dark
+              PROWLARR__AUTH__METHOD: External
+              PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              PROWLARR__LOG__DBENABLED: "False"
+              PROWLARR__LOG__LEVEL: info
+              PROWLARR__SERVER__PORT: &port 80
+              PROWLARR__UPDATE__BRANCH: develop
               TZ: Europe/London
-              GATUS_CONFIG_PATH: /config
-              GATUS_DELAY_START_SECONDS: 5
-              WEB_PORT: &port 80
+            envFrom:
+              - secretRef:
+                  name: prowlarr-secret
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /health
+                    path: /ping
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -70,7 +60,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                memory: 256Mi
+                memory: 1Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -80,38 +70,23 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: gatus
+        controller: prowlarr
         ports:
           http:
             port: *port
-    serviceMonitor:
-      app:
-        serviceName: gatus
-        endpoints:
-          - port: http
     route:
       app:
-        hostnames:
-          - "{{ .Release.Name }}.npmulder.dev"
-          - status.npmulder.dev
+        hostnames: ["{{ .Release.Name }}.npmulder.dev"]
         parentRefs:
-          - name: external
+          - name: internal
             namespace: network
             sectionName: https
         rules:
           - backendRefs:
               - name: *app
                 port: *port
-    serviceAccount:
-      create: true
-      name: gatus
     persistence:
       config:
-        existingClaim: gatus
-      config-file:
-        type: configMap
-        name: gatus-configmap
-        globalMounts:
-          - path: /config/config.yaml
-            subPath: config.yaml
-            readOnly: true
+        existingClaim: prowlarr
+      tmp:
+        type: emptyDir

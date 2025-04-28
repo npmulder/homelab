@@ -9,3 +9,4 @@ components:
 resources:
   - ./echo/ks.yaml
   - ./prowlarr/ks.yaml
+  - ./sonarr/ks.yaml

@@ -87,9 +87,14 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: sonarr
+        enabled: true
+        size: 1Gi
+        storageClass: ceph-block  # Uncomment and set if you want a specific storage class
+        accessMode: ReadWriteOnce
       config-cache:
-        existingClaim: sonarr-cache
+        size: 1Gi
+        storageClass: ceph-block  # Uncomment and set if you want a specific storage class
+        accessMode: ReadWriteOnce
         globalMounts:
           - path: /config/MediaCover
       media:

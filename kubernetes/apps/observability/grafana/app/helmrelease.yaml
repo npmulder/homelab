@@ -231,7 +231,7 @@ spec:
     route:
       main:
         enabled: true
-        hostnames: ["{{ .Release.Name }}.devbu.io"]
+        hostnames: ["{{ .Release.Name }}.npmulder.dev"]
         parentRefs:
           - name: internal
             namespace: kube-system

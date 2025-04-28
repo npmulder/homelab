@@ -44,7 +44,7 @@ spec:
           hostnames: ["alertmanager.npmulder.dev"]
           parentRefs:
             - name: internal
-              namespace: network
+              namespace: kube-system
               sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:

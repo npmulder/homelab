@@ -7,6 +7,7 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
+  hostLegacyRouting: true
   # tproxy: true
 bpfClockProbe: true
 bgpControlPlane:
@@ -22,7 +23,6 @@ cni:
   exclusive: false
 dashboards:
   enabled: true
-devices: ens+
 enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true

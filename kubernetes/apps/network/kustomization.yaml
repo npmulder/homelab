@@ -11,5 +11,6 @@ resources:
   # - ./internal/ks.yaml
   - ./cloudflare-tunnel/ks.yaml
   - ./cloudflare-dns/ks.yaml
+  - ./internal-dns/ks.yaml
   - ./echo/ks.yaml
   # - ./unifi-dns/ks.yaml

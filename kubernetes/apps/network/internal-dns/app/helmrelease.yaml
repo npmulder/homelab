@@ -50,7 +50,7 @@ spec:
     sources: ["crd", "gateway-httproute"]
     txtOwnerId: default
     txtPrefix: k8s.
-    logLevel: trace
+    logLevel: debug
     registry: noop
     domainFilters: ["npmulder.dev"]
     serviceMonitor:

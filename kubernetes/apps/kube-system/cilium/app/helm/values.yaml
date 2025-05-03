@@ -24,6 +24,8 @@ gatewayAPI:
   enabled: true
   enableAlpn: true
   xffNumTrustedHops: 1
+  controller:
+    enabled: true
 dashboards:
   enabled: true
 hubble:

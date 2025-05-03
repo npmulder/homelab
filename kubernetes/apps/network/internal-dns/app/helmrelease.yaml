@@ -31,6 +31,10 @@ spec:
     remediation:
       retries: 3
   values:
+    image:
+      repository: gcr.io/k8s-staging-external-dns/external-dns
+      tag: v20250402-v0.16.1-48-g1efdf416   # CI build that includes Pi‑hole‑v6 support
+      pullPolicy: IfNotPresent
     fullnameOverride: *app
     provider:
       name: pihole

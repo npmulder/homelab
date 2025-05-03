@@ -60,3 +60,11 @@ spec:
         rollOutPods: true
     operator:
       tolerations: []
+    gatewayAPI:
+      enabled: true
+      enableAlpn: true
+      xffNumTrustedHops: 1
+      controller:
+        enabled: true
+        replicas: 1
+        tolerations: []

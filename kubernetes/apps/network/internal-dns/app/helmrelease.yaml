@@ -35,6 +35,7 @@ spec:
     provider:
       name: pihole
     args:
+      - --log-level=trace
       - --registry=noop
       - --pihole-api-version=6
     extraArgs:

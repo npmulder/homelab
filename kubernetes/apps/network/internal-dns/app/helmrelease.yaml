@@ -45,6 +45,7 @@ spec:
       # Change this to the actual address of your Pi-hole web server
       - --pihole-server=http://10.1.2.5
       - --pihole-tls-skip-verify
+      - --pihole-api-version=6
     triggerLoopOnEvent: true
     policy: upsert-only
     sources: ["crd", "gateway-httproute"]

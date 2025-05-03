@@ -34,10 +34,6 @@ spec:
     fullnameOverride: *app
     provider:
       name: pihole
-    args:
-      - --log-level=trace
-      - --registry=noop
-      - --pihole-api-version=6
     extraArgs:
       - --gateway-name=internal
       # Pihole only supports A/AAAA/CNAME records so there is no mechanism to track ownership.
@@ -48,11 +44,14 @@ spec:
       # Switch to pihole V6 API
       # Change this to the actual address of your Pi-hole web server
       - --pihole-server=http://10.1.2.5
+      - --pihole-tls-skip-verify
     triggerLoopOnEvent: true
     policy: upsert-only
     sources: ["crd", "gateway-httproute"]
     txtOwnerId: default
     txtPrefix: k8s.
+    logLevel: trace
+    registry: noop
     domainFilters: ["npmulder.dev"]
     serviceMonitor:
       enabled: true

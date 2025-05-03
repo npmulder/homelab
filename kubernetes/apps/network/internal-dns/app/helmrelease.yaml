@@ -34,6 +34,9 @@ spec:
     fullnameOverride: *app
     provider:
       name: pihole
+    args:
+      - --registry=noop
+      - --pihole-api-version=6
     extraArgs:
       - --gateway-name=internal
       # Pihole only supports A/AAAA/CNAME records so there is no mechanism to track ownership.

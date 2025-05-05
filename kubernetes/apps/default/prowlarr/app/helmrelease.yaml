@@ -79,7 +79,7 @@ spec:
         hostnames: ["{{ .Release.Name }}.npmulder.dev"]
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:

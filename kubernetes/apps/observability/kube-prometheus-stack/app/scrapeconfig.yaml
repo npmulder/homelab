@@ -3,12 +3,13 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name node-exporter
+  name: &name pve
 spec:
   staticConfigs:
     - targets:
-        - expanse.internal:9100
-        - pikvm.internal:9100
+        - 10.1.2.155:9221
+        - 10.1.2.188:9221
+        - 10.1.2.129:9221
   metricsPath: /metrics
   relabelings:
     - action: replace

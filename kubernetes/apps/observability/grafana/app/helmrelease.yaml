@@ -201,7 +201,8 @@ spec:
           # renovate: depName="ZFS"
           gnetId: 7845
           revision: 4
-          datasource: Prometheus
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
         pve:
           # renovate: depName="Proxmox Virtual Environment Dashboard"
           gnetId: 10347

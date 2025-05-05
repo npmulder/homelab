@@ -99,3 +99,11 @@ spec:
         tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
       rules:
         searchNamespace: ALL
+    route:
+      main:
+        enabled: true
+        hostnames: ["{{ .Release.Name }}.npmulder.dev"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https

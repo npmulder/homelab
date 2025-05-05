@@ -201,13 +201,13 @@ spec:
           # renovate: depName="ZFS"
           gnetId: 7845
           revision: 4
-          datasource:
-            - { name: DS_PROMETHEUS, value: Prometheus }
+          datasource: Prometheus
         pve:
           # renovate: depName="Proxmox Virtual Environment Dashboard"
           gnetId: 10347
           revision: 5
-          datasource: Prometheus
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
     sidecar:
       image:
         registry: ghcr.io

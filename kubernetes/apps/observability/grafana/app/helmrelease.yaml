@@ -60,6 +60,7 @@ spec:
           - { name: Alertmanager, orgId: 1 }
           - { name: Loki, orgId: 1 }
           - { name: Prometheus, orgId: 1 }
+          - { name: Tempo, orgId: 1 }
         datasources:
           - name: Prometheus
             type: prometheus
@@ -74,6 +75,24 @@ spec:
             url: http://loki-headless.observability.svc.cluster.local:3100
             jsonData:
               maxLines: 250
+          - name: Tempo
+            type: tempo
+            uid: tempo
+            access: proxy
+            url: http://tempo.observability.svc.cluster.local:3100
+            jsonData:
+              tracesToLogsV2:
+                datasourceUid: loki
+                tags: ['job', 'instance', 'pod', 'namespace']
+                filterByTraceID: false
+                filterBySpanID: false
+              tracesToMetrics:
+                datasourceUid: prometheus
+                tags: [{ key: 'service.name', value: 'service' }, { key: 'service.namespace', value: 'namespace' }]
+              serviceMap:
+                datasourceUid: prometheus
+              nodeGraph:
+                enabled: true
           - name: Alertmanager
             type: alertmanager
             uid: alertmanager

@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: tempo
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 1.19.1
+  url: oci://ghcr.io/grafana/helm-charts/tempo
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tempo
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: tempo
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    deploymentMode: SingleBinary
+    tempo:
+      retention: 336h # 14 days
+      global_overrides:
+        max_bytes_per_tag_values_query: 5000000
+      storage:
+        trace:
+          backend: local
+          local:
+            path: /var/tempo/traces
+      server:
+        log_level: info
+      ingester:
+        trace_idle_period: 10s
+        max_block_bytes: 1_000_000
+        max_block_duration: 5m
+      compactor:
+        compaction:
+          block_retention: 336h # 14 days
+      distributor:
+        receivers:
+          otlp:
+            protocols:
+              grpc:
+                endpoint: 0.0.0.0:4317
+              http:
+                endpoint: 0.0.0.0:4318
+          jaeger:
+            protocols:
+              thrift_http:
+                endpoint: 0.0.0.0:14268
+              grpc:
+                endpoint: 0.0.0.0:14250
+          zipkin:
+            endpoint: 0.0.0.0:9411
+    singleBinary:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          memory: 1Gi
+      persistence:
+        enabled: true
+        storageClassName: ceph-block
+        size: 20Gi
+    serviceMonitor:
+      enabled: true
+    route:
+      main:
+        enabled: true
+        hostnames: ["tempo.npmulder.dev"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https

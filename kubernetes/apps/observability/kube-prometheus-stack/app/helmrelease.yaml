@@ -47,9 +47,6 @@ spec:
               namespace: kube-system
               sectionName: https
       alertmanagerSpec:
-        alertmanagerConfiguration:
-          global:
-            resolveTimeout: 5m
         externalUrl: https://alertmanager.npmulder.dev
         storage:
           volumeClaimTemplate:

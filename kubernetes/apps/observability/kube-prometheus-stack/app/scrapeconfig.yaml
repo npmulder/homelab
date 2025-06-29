@@ -10,6 +10,7 @@ spec:
         - 10.1.2.155:9221
         - 10.1.2.188:9221
         - 10.1.2.129:9221
+        - 10.1.2.142:9221
   metricsPath: /metrics
   relabelings:
     - action: replace

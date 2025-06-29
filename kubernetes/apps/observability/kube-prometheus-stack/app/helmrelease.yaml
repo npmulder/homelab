@@ -48,7 +48,6 @@ spec:
               sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
-          name: alertmanager
           global:
             resolveTimeout: 5m
         externalUrl: https://alertmanager.npmulder.dev

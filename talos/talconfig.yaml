@@ -24,7 +24,7 @@ nodes:
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/dc8730aa8cc7bfa5ef7e2b3284248f2631135b2faf4ae11aa997a0c1987b0eee
     controlPlane: true
     patches:
       - "@./patches/gpu/intel-arc-support.yaml"

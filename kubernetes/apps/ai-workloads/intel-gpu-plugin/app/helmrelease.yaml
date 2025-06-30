@@ -17,7 +17,7 @@ spec:
   interval: 1h
   chart:
     spec:
-      chart: intel-device-plugins-gpu
+      chart: intel-device-plugins-operator
       version: 0.30.0
       sourceRef:
         kind: HelmRepository
@@ -30,38 +30,45 @@ spec:
     remediation:
       retries: 3
   values:
-    # Enable Intel GPU device plugin
-    name: intel-gpu-device-plugin
-    image:
-      repository: intel/intel-gpu-plugin
-      tag: 0.30.0
+    # Intel Device Plugins Operator configuration
+    operator:
+      repository: intel/intel-deviceplugin-operator
+      tag: v0.30.0
     
-    # Node selector to run only on GPU nodes
-    nodeSelector:
-      kubernetes.io/hostname: talos-cp-01
-    
-    # Tolerations for GPU node taint
-    tolerations:
-      - key: intel.com/gpu
-        operator: Equal
-        value: present
-        effect: NoSchedule
-    
-    # Resource configuration
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
-    
-    # Security context
-    securityContext:
-      privileged: true
-    
-    # Device plugin configuration
-    args:
-      - "-v=2"
-      - "-shared-dev-num=10"
-      - "-enable-monitoring"
+    # Enable GPU device plugin via operator
+    gpuDevicePlugin:
+      enabled: true
+      name: intel-gpu-device-plugin
+      image:
+        repository: intel/intel-gpu-plugin
+        tag: 0.30.0
+      
+      # Node selector to run only on GPU nodes  
+      nodeSelector:
+        kubernetes.io/hostname: talos-cp-01
+      
+      # Tolerations for GPU node taint
+      tolerations:
+        - key: intel.com/gpu
+          operator: Equal
+          value: present
+          effect: NoSchedule
+      
+      # Resource configuration
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+      
+      # Security context
+      securityContext:
+        privileged: true
+      
+      # Device plugin configuration
+      args:
+        - "-v=2"
+        - "-shared-dev-num=10"
+        - "-enable-monitoring"

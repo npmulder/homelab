@@ -6,7 +6,6 @@ machine:
     modules:
       # Intel graphics drivers
       - name: i915
-      - name: xe
       - name: drm
       - name: drm_kms_helper
       # Additional Intel GPU modules
@@ -18,3 +17,16 @@ machine:
     dev.i915.perf_stream_paranoid: 0
     # Memory management for GPU workloads
     vm.max_map_count: 262144
+  files:
+    # Force Intel Arc B580 device ID recognition
+    - content: |
+        #!/bin/bash
+        # Add Intel Arc B580 (8086:e20b) to i915 driver
+        echo "8086 e20b" > /sys/bus/pci/drivers/i915/new_id 2>/dev/null || true
+        # Bind device to i915 if not already bound
+        if [ ! -e /sys/bus/pci/devices/0000:01:00.0/driver ]; then
+          echo "0000:01:00.0" > /sys/bus/pci/drivers/i915/bind 2>/dev/null || true
+        fi
+      permissions: 0o755
+      path: /usr/local/bin/intel-arc-setup.sh
+      op: create

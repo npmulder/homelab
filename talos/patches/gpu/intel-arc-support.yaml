@@ -1,11 +1,15 @@
 machine:
   kernel:
     modules:
+      - name: mei
+      - name: mei_me
+      - name: mei_gsc
       - name: i915
         parameters:
           - force_probe=e20b
           - enable_guc=2
       - name: drm
+      - name: drm_kms_helper
   install:
     extraKernelArgs:
       - i915.force_probe=e20b

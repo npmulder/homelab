@@ -1,0 +1,143 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: ollama
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.65.0
+  url: oci://ghcr.io/otwld/ollama-helm/ollama
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ollama
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: ollama
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    # Ollama configuration
+    ollama:
+      # Use Intel IPEX-LLM optimized image
+      image:
+        repository: intel/intel-extension-for-pytorch
+        tag: 2.5.0-xpu
+        pullPolicy: IfNotPresent
+      
+      # GPU configuration for Intel Arc
+      gpu:
+        enabled: true
+        type: "intel"
+        number: 1
+      
+      # Environment variables for Intel GPU
+      env:
+        - name: OLLAMA_NUM_GPU
+          value: "999"
+        - name: SYCL_PI_LEVEL_ZERO_USE_IMMEDIATE_COMMANDLISTS
+          value: "1"
+        - name: ONEAPI_DEVICE_SELECTOR
+          value: "level_zero:0"
+        - name: OLLAMA_HOST
+          value: "0.0.0.0:11434"
+        - name: OLLAMA_KEEP_ALIVE
+          value: "24h"
+      
+      # Resource requirements
+      resources:
+        requests:
+          cpu: 1000m
+          memory: 8Gi
+          intel.com/gpu: 1
+        limits:
+          cpu: 4000m
+          memory: 16Gi
+          intel.com/gpu: 1
+      
+      # Node scheduling
+      nodeSelector:
+        kubernetes.io/hostname: talos-cp-01
+      
+      tolerations:
+        - key: intel.com/gpu
+          operator: Equal
+          value: present
+          effect: NoSchedule
+      
+      # Security context
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+        fsGroup: 0
+      
+      # Service configuration
+      service:
+        type: ClusterIP
+        port: 11434
+        targetPort: 11434
+    
+    # Persistent storage for models
+    persistence:
+      enabled: true
+      storageClass: openebs-hostpath
+      size: 100Gi
+      accessModes:
+        - ReadWriteOnce
+    
+    # Init container to prepare volume
+    initContainers:
+      - name: volume-prep
+        image: busybox:1.36
+        command: 
+          - sh
+          - -c
+          - |
+            mkdir -p /ollama/.ollama/models
+            chmod -R 755 /ollama/.ollama
+            chown -R 1000:1000 /ollama/.ollama || true
+        volumeMounts:
+          - name: ollama-data
+            mountPath: /ollama
+        securityContext:
+          runAsUser: 0
+    
+    # Ingress configuration
+    ingress:
+      enabled: true
+      className: internal
+      annotations:
+        external-dns.alpha.kubernetes.io/target: internal.npmulder.dev
+      hosts:
+        - host: ollama.npmulder.dev
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                name: ollama
+                port: 11434
+      tls:
+        - secretName: ollama-tls
+          hosts:
+            - ollama.npmulder.dev
+    
+    # ServiceMonitor for Prometheus
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      path: /metrics
+      port: http

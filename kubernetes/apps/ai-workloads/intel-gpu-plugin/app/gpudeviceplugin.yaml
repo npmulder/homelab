@@ -12,28 +12,7 @@ spec:
   nodeSelector:
     kubernetes.io/hostname: talos-cp-01
   
-  # Tolerations for GPU node taint
-  tolerations:
-    - key: intel.com/gpu
-      operator: Equal
-      value: present
-      effect: NoSchedule
-  
-  # Resource configuration
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
-  
-  # Security context
-  securityContext:
-    privileged: true
-  
-  # Device plugin configuration
-  args:
-    - "-v=2"
-    - "-shared-dev-num=10"
-    - "-enable-monitoring"
+  # Enable monitoring and verbose logging
+  enableMonitoring: true
+  logLevel: 2
+  sharedDevNum: 10

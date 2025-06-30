@@ -2,9 +2,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: ai-workloads
-components:
-  - ../../components/common
 resources:
-  # - ./intel-gpu-plugin/ks.yaml
+  - ./namespace.yaml
+  - ./intel-gpu-plugin/ks.yaml
   - ./ollama/ks.yaml

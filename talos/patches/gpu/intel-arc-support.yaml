@@ -1,19 +1,11 @@
----
-# Intel Arc B580 GPU support patch for Talos Linux
-# Enables Intel Xe2/Battlemage architecture support
+# gpu-patch.yaml
 machine:
+  install:
+    extraKernelArgs:
+      - i915.force_probe=e20b
+      - i915.enable_guc=2
   kernel:
     modules:
-      # Intel graphics drivers
       - name: i915
       - name: drm
       - name: drm_kms_helper
-      # Additional Intel GPU modules
-      - name: intel_gtt
-      - name: ttm
-      - name: gpu_sched
-  sysctls:
-    # Intel GPU performance tuning
-    dev.i915.perf_stream_paranoid: 0
-    # Memory management for GPU workloads
-    vm.max_map_count: 262144

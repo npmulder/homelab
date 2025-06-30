@@ -4,6 +4,7 @@ apiVersion: deviceplugin.intel.com/v1
 kind: GpuDevicePlugin
 metadata:
   name: intel-gpu-plugin
+  namespace: ai-workloads
 spec:
   # Image configuration
   image: intel/intel-gpu-plugin:0.30.0

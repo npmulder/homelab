@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/deviceplugin.intel.com/gpudeviceplugin_v1.json
+apiVersion: deviceplugin.intel.com/v1
+kind: GpuDevicePlugin
+metadata:
+  name: intel-gpu-plugin
+spec:
+  # Image configuration
+  image: intel/intel-gpu-plugin:0.30.0
+  
+  # Node selector to run only on GPU nodes
+  nodeSelector:
+    kubernetes.io/hostname: talos-cp-01
+  
+  # Tolerations for GPU node taint
+  tolerations:
+    - key: intel.com/gpu
+      operator: Equal
+      value: present
+      effect: NoSchedule
+  
+  # Resource configuration
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Security context
+  securityContext:
+    privileged: true
+  
+  # Device plugin configuration
+  args:
+    - "-v=2"
+    - "-shared-dev-num=10"
+    - "-enable-monitoring"

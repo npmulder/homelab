@@ -5,3 +5,4 @@ kind: Kustomization
 namespace: ai-workloads
 resources:
   - ./helmrelease.yaml
+  - ./gpudeviceplugin.yaml

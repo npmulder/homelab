@@ -6,5 +6,5 @@ namespace: ai-workloads
 components:
   - ../../components/common
 resources:
-  - ./intel-gpu-plugin/ks.yaml
+  # - ./intel-gpu-plugin/ks.yaml
   - ./ollama/ks.yaml

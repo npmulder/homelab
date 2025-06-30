@@ -1,11 +1,12 @@
-# gpu-patch.yaml
 machine:
+  kernel:
+    modules:
+      - name: i915
+        parameters:
+          - force_probe=e20b
+          - enable_guc=2
+      - name: drm
   install:
     extraKernelArgs:
       - i915.force_probe=e20b
       - i915.enable_guc=2
-  kernel:
-    modules:
-      - name: i915
-      - name: drm
-      - name: drm_kms_helper

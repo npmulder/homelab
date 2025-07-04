@@ -33,6 +33,7 @@ spec:
               OLLAMA_MODELS: /home/ollama/.ollama/models
               OLLAMA_KEEP_ALIVE: 24h
               OLLAMA_INTEL_GPU: "true"
+              OLLAMA_DEBUG: "1"
               HOME: /home/ollama
             probes:
               liveness: &probes

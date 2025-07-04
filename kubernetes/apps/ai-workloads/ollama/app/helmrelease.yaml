@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: docker.io/ollama/ollama
-              tag: 0.5.7
+              tag: 0.9.5
             env:
               OLLAMA_HOST: 0.0.0.0
               OLLAMA_PORT: &port 11434

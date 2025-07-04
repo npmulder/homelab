@@ -26,8 +26,6 @@ nodes:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/928a729469980b05d25454eebe170944dc579b83a3e06d732a0f3acf44f8b562
     controlPlane: true
-    patches:
-      - "@./patches/gpu/intel-arc-support.yaml"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "bc:24:11:30:87:ba"

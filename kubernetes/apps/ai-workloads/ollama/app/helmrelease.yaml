@@ -64,10 +64,10 @@ spec:
               requests:
                 cpu: 500m
                 memory: 1Gi
-                intel.com/xe: 1
+                gpu.intel.com/xe: 1
               limits:
                 memory: 8Gi
-                intel.com/xe: 1
+                gpu.intel.com/xe: 1
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true

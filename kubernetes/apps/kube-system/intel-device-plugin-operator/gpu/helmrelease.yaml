@@ -31,6 +31,13 @@ spec:
     remediation:
       retries: 3
   values:
-    name: i915
+    name: xe
     nodeFeatureRule: true
     sharedDevNum: 99
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node.cilium.io/agent-not-ready
+        operator: Exists
+        effect: NoSchedule

@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/ollama
-              tag: sha-f98a8b9
+              tag: sha-d7ea4fc@sha256:c86c9ed87447c2e1ab2cca8e84c9747f999773c024964d1fbef30927be8a0d47
             env:
               OLLAMA_HOST: 0.0.0.0
               OLLAMA_PORT: &port 11434

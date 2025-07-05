@@ -24,8 +24,8 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/ollama/ollama
-              tag: 0.9.5
+              repository: ghcr.io/npmulder/ollama
+              tag: sha-f98a8b9
             env:
               OLLAMA_HOST: 0.0.0.0
               OLLAMA_PORT: &port 11434

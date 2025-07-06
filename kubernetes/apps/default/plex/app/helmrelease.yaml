@@ -31,7 +31,6 @@ spec:
               - -c
               - |
                 chown -R 1000:1000 /config
-                chown -R 1000:1000 /config-cache
             securityContext:
               runAsUser: 0
               runAsNonRoot: false

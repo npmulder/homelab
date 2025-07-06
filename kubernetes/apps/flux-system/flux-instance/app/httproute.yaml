@@ -12,11 +12,3 @@ spec:
     - name: external
       namespace: kube-system
       sectionName: https
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /hook/
-      backendRefs:
-        - name: webhook-receiver
-          port: 80

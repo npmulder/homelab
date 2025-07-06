@@ -91,7 +91,7 @@ spec:
       app:
         hostnames: ["{{ .Release.Name }}.npmulder.dev"]
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
         rules:
@@ -102,10 +102,10 @@ spec:
               - type: RequestHeaderModifier
                 requestHeaderModifier:
                   remove: ["Range"]
-            # matches:
-            #   - path:
-            #       type: PathPrefix
-            #       value: /library/streams
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /library/streams
           - backendRefs:
               - identifier: app
                 port: *port

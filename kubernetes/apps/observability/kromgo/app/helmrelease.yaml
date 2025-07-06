@@ -67,7 +67,7 @@ spec:
             port: *healthPort
     route:
       app:
-        hostnames: ["{{ .Release.Name }}npmulder.dev"]
+        hostnames: ["{{ .Release.Name }}.npmulder.dev"]
         parentRefs:
           - name: external
             namespace: kube-system

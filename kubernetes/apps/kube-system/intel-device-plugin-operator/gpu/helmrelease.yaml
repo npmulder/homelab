@@ -32,12 +32,6 @@ spec:
       retries: 3
   values:
     name: xe
-    nodeFeatureRule: true
+    nodeFeatureRule: false
     sharedDevNum: 99
     tolerations:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
-      - key: node.cilium.io/agent-not-ready
-        operator: Exists
-        effect: NoSchedule

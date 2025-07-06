@@ -42,8 +42,8 @@ The entire cluster is managed through Git - no manual kubectl commands, no SSH a
   </tr>
   <tr>
     <td><strong>Storage</strong></td>
-    <td><a href="https://rook.io/">Rook-Ceph</a></td>
-    <td>Distributed, replicated block storage</td>
+    <td><a href="https://openebs.io/">OpenEBS</a></td>
+    <td>Local persistent storage with hostPath provisioner</td>
   </tr>
   <tr>
     <td><strong>Secret Management</strong></td>
@@ -78,7 +78,7 @@ The entire cluster is managed through Git - no manual kubectl commands, no SSH a
 - **🤖 Automated Everything**: Renovate handles dependency updates
 - **📊 Enterprise Monitoring**: 20+ Grafana dashboards with comprehensive alerting
 - **🔐 Security First**: Encrypted secrets, network policies, security contexts
-- **🎭 High Availability**: 3-node control plane with distributed storage
+- **🎭 High Availability**: 3-node control plane with local persistent storage
 - **🚀 Zero Downtime**: Rolling updates with proper health checks
 - **🌐 Hybrid Networking**: Internal and external application access
 
@@ -115,7 +115,7 @@ The entire cluster is managed through Git - no manual kubectl commands, no SSH a
 │  │  └─────────────┘ └─────────────┘ └─────────────┘          │ │
 │  │                                                             │ │
 │  │  ┌─────────────────────────────────────────────────────────┐ │ │
-│  │  │              🗄️  Rook-Ceph Storage                     │ │ │
+│  │  │              🗄️  OpenEBS Local Storage                │ │ │
 │  │  └─────────────────────────────────────────────────────────┘ │ │
 │  └─────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
@@ -160,7 +160,7 @@ kubectl logs -n <namespace> <pod> -f
 │   │   ├── 📁 default/           # Media applications
 │   │   ├── 📁 network/           # Ingress, DNS, tunnels
 │   │   ├── 📁 observability/     # Monitoring stack
-│   │   └── 📁 rook-ceph/         # Distributed storage
+│   │   └── 📁 openebs-system/    # Local storage provisioner
 │   ├── 📁 components/            # Reusable components
 │   └── 📁 flux/                  # GitOps configuration
 ├── 📁 talos/                     # OS configuration
@@ -185,6 +185,11 @@ kubectl logs -n <namespace> <pod> -f
 - **External Access**: Cloudflare Tunnel for secure remote access
 - **Load Balancing**: NGINX ingress controllers
 - **Network Security**: Cilium network policies
+
+### 🗄️ Storage
+- **Local Storage**: OpenEBS hostPath provisioner for persistent volumes
+- **Media Storage**: NFS integration with TrueNAS for media files
+- **AI Workloads**: Dedicated storage for Ollama models and inference
 
 ## 🎨 Configuration Management
 
@@ -285,15 +290,7 @@ This homelab draws inspiration from the amazing Kubernetes at Home community:
 
 ## 📊 Repository Statistics
 
-![Repository Stats](https://repobeats.axiom.co/api/embed/your-repo-id.svg "Repobeats analytics image")
-
-## ⭐ Stargazers
-
-<div align="center">
-
-[![Star History Chart](https://api.star-history.com/svg?repos=npmulder/homelab&type=Date)](https://star-history.com/#npmulder/homelab&Date)
-
-</div>
+![Repository Stats](https://repobeats.axiom.co/api/embed/58f29dbece9f9142eec77ad7f9000d7689e6990c.svg "Repobeats analytics image")
 
 ---
 

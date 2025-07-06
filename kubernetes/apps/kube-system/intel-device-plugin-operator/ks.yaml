@@ -45,7 +45,7 @@ spec:
       namespace: *namespace
     - apiVersion: deviceplugin.intel.com/v1
       kind: GpuDevicePlugin
-      name: i915
+      name: xe
   healthCheckExprs:
     - apiVersion: deviceplugin.intel.com/v1
       kind: GpuDevicePlugin

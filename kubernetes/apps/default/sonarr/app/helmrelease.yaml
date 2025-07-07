@@ -89,11 +89,11 @@ spec:
       config:
         enabled: true
         size: 1Gi
-        storageClass: ceph-block  # Uncomment and set if you want a specific storage class
+        storageClass: openebs-hostpath  # Uncomment and set if you want a specific storage class
         accessMode: ReadWriteOnce
       config-cache:
         size: 1Gi
-        storageClass: ceph-block  # Uncomment and set if you want a specific storage class
+        storageClass: openebs-hostpath  # Uncomment and set if you want a specific storage class
         accessMode: ReadWriteOnce
         globalMounts:
           - path: /config/MediaCover

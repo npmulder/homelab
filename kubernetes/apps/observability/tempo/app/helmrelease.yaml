@@ -76,7 +76,7 @@ spec:
           memory: 1Gi
       persistence:
         enabled: true
-        storageClassName: ceph-block
+        storageClassName: openebs-hostpath
         size: 20Gi
     serviceMonitor:
       enabled: true

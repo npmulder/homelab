@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: gluetun-monitor
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "${APP}"
+  endpoints:
+    - port: http
+      path: /v1/openvpn/status
+      interval: 30s
+      scrapeTimeout: 10s
+    - port: http
+      path: /v1/dns/status
+      interval: 30s
+      scrapeTimeout: 10s

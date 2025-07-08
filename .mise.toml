@@ -8,6 +8,7 @@ KUBERNETES_DIR = "{{config_root}}/kubernetes"
 ROOT_DIR = "{{config_root}}"
 SCRIPTS_DIR = "{{config_root}}/scripts"
 TALOS_DIR = "{{config_root}}/talos"
+MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 
 [tools]
 "python" = "3.13"

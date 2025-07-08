@@ -95,7 +95,7 @@ spec:
           - path: /media/Downloads/sabnzbd
             subPath: Downloads/sabnzbd
       # scripts:
-      #   type: configMap
+      #   type: configMap1
       #   name: sabnzbd-scripts
       #   defaultMode: 0775
       #   globalMounts:

@@ -56,6 +56,9 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              runAsNonRoot: true
+              runAsUser: 1000
+              runAsGroup: 1000
             resources:
               requests:
                 cpu: 100m
@@ -92,8 +95,10 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
-              allowPrivilegeEscalation: false
+                  - SYS_MODULE
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
+              privileged: true
             probes:
               liveness:
                 enabled: true

@@ -31,6 +31,8 @@ spec:
               QBT_WEBUI_LOCALHOSTAUTH: "false"
               QBT_WEBUI_HOST_HEADER_VALIDATION: "false"
               QBT_WEBUI_CSRF_PROTECTION: "false"
+              QBT_WEBUI_USERNAME: "admin"
+              QBT_WEBUI_PASSWORD: "adminpass"
             probes:
               liveness: &probes
                 enabled: true

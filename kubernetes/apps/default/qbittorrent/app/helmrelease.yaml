@@ -24,6 +24,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.0@sha256:37aefd713ba31d51255995261616f1144378887bc5f21665a0ebf851fb85f69a
+            dependsOn: gluetun
             env:
               TZ: Europe/London
               QBT_WEBUI_PORT: &port 80
@@ -60,6 +61,7 @@ spec:
                 cpu: 100m
               limits:
                 memory: 5Gi
+          gluetun: ${gluetun-sidecar:gluetun}
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -67,6 +69,9 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
+        sysctls:
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
     service:
       app:
         forceRename: *app
@@ -75,13 +80,7 @@ spec:
           http:
             port: *port
       bittorrent:
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: 10.1.2.25
-        ports:
-          bittorrent-tcp:
-            port: *torrentPort
-            protocol: TCP
+        enabled: false
     route:
       app:
         hostnames:

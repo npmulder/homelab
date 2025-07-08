@@ -13,6 +13,7 @@ spec:
     - ../../../../components/gatus/guarded
     - ../../../../components/keda/nfs-scaler
     - ../../../../components/volsync
+    - ../../../../components/gluetun
   dependsOn:
     - name: keda
       namespace: observability
@@ -23,6 +24,7 @@ spec:
       APP: *app
       GATUS_SUBDOMAIN: qb
       VOLSYNC_CAPACITY: 2Gi
+      GLUETUN_FORWARDED_PORT: "50413"
   prune: true
   retryInterval: 2m
   sourceRef:

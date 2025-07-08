@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: not-used
+spec:
+  template:
+    spec:
+      containers:
+      - name: gluetun
+        image: qmcgaw/gluetun:v3.40.1
+        env:
+        - name: TZ
+          value: "${TZ:=Europe/London}"
+        - name: VPN_SERVICE_PROVIDER
+          value: "nordvpn"
+        - name: VPN_TYPE
+          value: "openvpn"
+        - name: OPENVPN_USER
+          value: "${NORDVPN_OPENVPN_USER}"
+        - name: OPENVPN_PASSWORD
+          value: "${NORDVPN_OPENVPN_PASSWORD}"
+        - name: SERVER_COUNTRIES
+          value: "Ireland"
+        - name: FIREWALL_OUTBOUND_SUBNETS
+          value: "10.42.0.0/16,10.43.0.0/16,10.1.2.0/24"
+        - name: FIREWALL_VPN_INPUT_PORTS
+          value: "80,443,${GLUETUN_FORWARDED_PORT:=50413}"
+        - name: HEALTH_VPN_DURATION_INITIAL
+          value: "30s"
+        - name: HEALTH_VPN_DURATION_ADDITION
+          value: "10s"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: DOT
+          value: "off"
+        - name: BLOCK_MALICIOUS
+          value: "on"
+        - name: BLOCK_SURVEILLANCE
+          value: "on"
+        - name: BLOCK_ADS
+          value: "on"
+        - name: HTTPPROXY
+          value: "on"
+        - name: HTTPPROXY_LOG
+          value: "on"
+        - name: HTTPPROXY_LISTENING_ADDRESS
+          value: ":8888"
+        - name: SHADOWSOCKS
+          value: "on"
+        - name: SHADOWSOCKS_LOG
+          value: "on"
+        - name: SHADOWSOCKS_LISTENING_ADDRESS
+          value: ":8388"
+        envFrom:
+        - secretRef:
+            name: gluetun-secret
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            memory: 512Mi

@@ -13,7 +13,6 @@ spec:
     - ../../../../components/gatus/guarded
     - ../../../../components/keda/nfs-scaler
     - ../../../../components/volsync
-    - ../../../../components/gluetun
   dependsOn:
     - name: keda
       namespace: observability

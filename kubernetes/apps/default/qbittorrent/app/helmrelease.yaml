@@ -63,8 +63,8 @@ spec:
                 memory: 5Gi
           gluetun:
             image:
-              repository: qmcgaw/gluetun
-              tag: v3.40.1
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40
             env:
               TZ: Europe/London
               VPN_SERVICE_PROVIDER: nordvpn

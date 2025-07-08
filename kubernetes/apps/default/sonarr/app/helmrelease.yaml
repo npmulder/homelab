@@ -89,8 +89,8 @@ spec:
           - path: /config/MediaCover
       media:
         type: nfs
-        server: expanse.internal
-        path: /mnt/eros/Media
+        server: truenas.internal
+        path: /mnt/Data/Media
         globalMounts:
           - path: /media
       tmp:

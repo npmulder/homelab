@@ -28,6 +28,7 @@ spec:
               TZ: Europe/London
               QBT_WEBUI_PORT: &port 80
               QBT_TORRENTING_PORT: &torrentPort 50413
+              QBT_WEBUI_LOCALHOSTAUTH: "false"
             probes:
               liveness: &probes
                 enabled: true

@@ -104,9 +104,11 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /
-                    port: 8000
+                  exec:
+                    command:
+                      - /bin/sh
+                      - -c
+                      - "ip route get 1.1.1.1 | grep -q tun0"
                   initialDelaySeconds: 30
                   periodSeconds: 10
                   timeoutSeconds: 5
@@ -115,9 +117,11 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /
-                    port: 8000
+                  exec:
+                    command:
+                      - /bin/sh
+                      - -c
+                      - "ip route get 1.1.1.1 | grep -q tun0"
                   initialDelaySeconds: 30
                   periodSeconds: 10
                   timeoutSeconds: 5

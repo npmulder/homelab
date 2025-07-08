@@ -67,13 +67,13 @@ spec:
     persistence:
       config:
         existingClaim: cross-seed
-      # secret-file:
-      #   type: secret
-      #   name: cross-seed-secret
-      #   globalMounts:
-      #     - path: /config/config.js
-      #       subPath: config.js
-      #       readOnly: true
+      secret-file:
+        type: secret
+        name: cross-seed-secret
+        globalMounts:
+          - path: /config/config.js
+            subPath: config.js
+            readOnly: true
       media:
         type: nfs
         server: truenas.internal

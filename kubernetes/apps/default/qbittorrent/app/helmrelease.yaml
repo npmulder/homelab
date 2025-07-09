@@ -23,28 +23,22 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.1.2@sha256:a724f86a39fa637fc4ff81165585d7273dc9dcd9ca59818a34e9fa9c467dd26c
-            dependsOn: gluetun
+              tag: 5.1.0@sha256:37aefd713ba31d51255995261616f1144378887bc5f21665a0ebf851fb85f69a
             env:
               TZ: Europe/London
               QBT_WEBUI_PORT: &port 80
               QBT_TORRENTING_PORT: &torrentPort 50413
-              QBT_WEBUI_LOCALHOSTAUTH: "false"
-              QBT_WEBUI_HOST_HEADER_VALIDATION: "false"
-              QBT_WEBUI_CSRF_PROTECTION: "false"
-              QBT_WEBUI_USERNAME: "admin"
-              QBT_WEBUI_PASSWORD: "adminpass"
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /
+                    path: /api/v2/app/version
                     port: *port
-                  initialDelaySeconds: 30
+                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 5
+                  timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
               startup:
@@ -56,87 +50,16 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-              runAsNonRoot: true
-              runAsUser: 1000
-              runAsGroup: 1000
             resources:
               requests:
                 cpu: 100m
               limits:
                 memory: 5Gi
-          gluetun:
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.40
-            env:
-              TZ: Europe/London
-              VPN_SERVICE_PROVIDER: nordvpn
-              VPN_TYPE: openvpn
-              SERVER_COUNTRIES: Ireland
-              FIREWALL_OUTBOUND_SUBNETS: "10.42.0.0/16,10.43.0.0/16,10.1.2.0/24"
-              FIREWALL_VPN_INPUT_PORTS: "80,443,50413"
-              HEALTH_VPN_DURATION_INITIAL: "30s"
-              HEALTH_VPN_DURATION_ADDITION: "10s"
-              LOG_LEVEL: info
-              DOT: "off"
-              BLOCK_MALICIOUS: "on"
-              BLOCK_SURVEILLANCE: "on"
-              BLOCK_ADS: "on"
-              HTTPPROXY: "on"
-              HTTPPROXY_LOG: "on"
-              HTTPPROXY_LISTENING_ADDRESS: ":8888"
-              SHADOWSOCKS: "on"
-              SHADOWSOCKS_LOG: "on"
-              SHADOWSOCKS_LISTENING_ADDRESS: ":8388"
-            envFrom:
-              - secretRef:
-                  name: gluetun-secret
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-                  - SYS_MODULE
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              privileged: true
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /bin/sh
-                      - -c
-                      - "ip route get 1.1.1.1 | grep -q tun0"
-                  initialDelaySeconds: 30
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-                  failureThreshold: 5
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /bin/sh
-                      - -c
-                      - "ip route get 1.1.1.1 | grep -q tun0"
-                  initialDelaySeconds: 30
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-                  failureThreshold: 3
-            resources:
-              requests:
-                cpu: 100m
-                memory: 128Mi
-              limits:
-                memory: 512Mi
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
     service:
@@ -147,7 +70,13 @@ spec:
           http:
             port: *port
       bittorrent:
-        enabled: false
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.1.2.23
+        ports:
+          bittorrent-tcp:
+            port: *torrentPort
+            protocol: TCP
     route:
       app:
         hostnames:

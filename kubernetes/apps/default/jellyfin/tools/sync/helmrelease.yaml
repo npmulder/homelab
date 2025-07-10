@@ -46,7 +46,7 @@ spec:
               PLEX_BASEURL: http://plex.default.svc.cluster.local:32400
               RUN_ONLY_ONCE: true
               TZ: Europe/London
-              USER_MAPPING: '{"npmulder": "npmulder"}'
+              USER_MAPPING: '{"npmu1": "npmulder"}'
               WHITELIST_LIBRARY: Movies,Shows
             resources:
               requests:

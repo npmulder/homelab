@@ -56,6 +56,15 @@ spec:
         pod:
           hostUsers: false
           restartPolicy: Never
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: NotIn
+                    values:
+                    - talos-cp-03
     persistence:
       tmp:
         type: emptyDir

@@ -1,0 +1,123 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  mode: deployment
+  replicas: 2
+  image: otel/opentelemetry-collector-contrib:0.114.0
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 100m
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    fsGroup: 65534
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      jaeger:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:14250
+          thrift_http:
+            endpoint: 0.0.0.0:14268
+      zipkin:
+        endpoint: 0.0.0.0:9411
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: 'otel-collector'
+              static_configs:
+                - targets: ['localhost:8888']
+    
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+        send_batch_max_size: 2048
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: 400
+      resource:
+        attributes:
+          - key: service.name
+            value: "otel-collector"
+            action: upsert
+          - key: service.version
+            value: "v0.114.0"
+            action: upsert
+          - key: deployment.environment
+            value: "homelab"
+            action: upsert
+    
+    exporters:
+      otlp/tempo:
+        endpoint: http://tempo.observability.svc.cluster.local:4317
+        tls:
+          insecure: true
+      prometheusremotewrite/prometheus:
+        endpoint: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090/api/v1/write
+        tls:
+          insecure: true
+        resource_to_telemetry_conversion:
+          enabled: true
+      loki:
+        endpoint: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push
+        tls:
+          insecure: true
+        format: json
+        labels:
+          attributes:
+            service.name: "service_name"
+            service.version: "service_version"
+            deployment.environment: "deployment_environment"
+          resource:
+            container.name: "container_name"
+            k8s.pod.name: "pod_name"
+            k8s.namespace.name: "namespace_name"
+      debug:
+        verbosity: basic
+        sampling_initial: 2
+        sampling_thereafter: 500
+    
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+      pprof:
+        endpoint: 0.0.0.0:1777
+      zpages:
+        endpoint: 0.0.0.0:55679
+      memory_ballast:
+        size_mib: 64
+    
+    service:
+      extensions: [health_check, pprof, zpages, memory_ballast]
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger, zipkin]
+          processors: [memory_limiter, resource, batch]
+          exporters: [otlp/tempo, debug]
+        metrics:
+          receivers: [otlp, prometheus]
+          processors: [memory_limiter, resource, batch]
+          exporters: [prometheusremotewrite/prometheus, debug]
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, resource, batch]
+          exporters: [loki, debug]
+      telemetry:
+        metrics:
+          address: 0.0.0.0:8888
+        logs:
+          level: info

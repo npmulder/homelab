@@ -48,9 +48,16 @@ spec:
         ENABLE_DOTNET_AUTO_INSTRUMENTATION: "true"
         ENABLE_NGINX_AUTO_INSTRUMENTATION: "true"
         ENABLE_APACHE_AUTO_INSTRUMENTATION: "true"
-    admission:
-      create: true
-      failurePolicy: Fail
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
     kubeRBACProxy:
       enabled: true
       image:
@@ -62,16 +69,9 @@ spec:
         requests:
           cpu: 5m
           memory: 32Mi
-    serviceMonitor:
-      enabled: true
-      interval: 30s
-      scrapeTimeout: 10s
-    rbac:
+    admissionWebhooks:
       create: true
-    serviceAccount:
-      create: true
-      name: opentelemetry-operator
-    namespaceOverride: ""
+      failurePolicy: Fail
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -80,13 +80,3 @@ spec:
       runAsNonRoot: true
       runAsUser: 65534
       fsGroup: 65534
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 65534
-      seccompProfile:
-        type: RuntimeDefault

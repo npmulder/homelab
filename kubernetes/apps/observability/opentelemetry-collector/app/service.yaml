@@ -8,8 +8,8 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/name: otel-collector
-    app.kubernetes.io/instance: observability.otel-collector
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/instance: opentelemetry-collector
   ports:
     - name: otlp-grpc
       port: 4317

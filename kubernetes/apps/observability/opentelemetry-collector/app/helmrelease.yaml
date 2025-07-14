@@ -1,0 +1,205 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opentelemetry-collector
+  namespace: observability
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: opentelemetry-collector
+      version: 0.114.0
+      sourceRef:
+        kind: HelmRepository
+        name: opentelemetry
+        namespace: flux-system
+      interval: 30m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    mode: deployment
+    replicaCount: 2
+    image:
+      repository: otel/opentelemetry-collector-contrib
+      tag: 0.114.0
+    command:
+      name: otelcol-contrib
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 500m
+      requests:
+        memory: 256Mi
+        cpu: 100m
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+      fsGroup: 65534
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65534
+      seccompProfile:
+        type: RuntimeDefault
+    config:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+        jaeger:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:14250
+            thrift_http:
+              endpoint: 0.0.0.0:14268
+        zipkin:
+          endpoint: 0.0.0.0:9411
+        prometheus:
+          config:
+            scrape_configs:
+              - job_name: 'otel-collector'
+                static_configs:
+                  - targets: ['localhost:8888']
+      processors:
+        batch:
+          timeout: 1s
+          send_batch_size: 1024
+          send_batch_max_size: 2048
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 400
+        resource:
+          attributes:
+            - key: service.name
+              value: "otel-collector"
+              action: upsert
+            - key: service.version
+              value: "v0.114.0"
+              action: upsert
+            - key: deployment.environment
+              value: "homelab"
+              action: upsert
+      exporters:
+        otlp/tempo:
+          endpoint: http://tempo.observability.svc.cluster.local:4317
+          tls:
+            insecure: true
+        prometheusremotewrite/prometheus:
+          endpoint: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090/api/v1/write
+          tls:
+            insecure: true
+          resource_to_telemetry_conversion:
+            enabled: true
+        loki:
+          endpoint: http://loki.observability.svc.cluster.local:3100/loki/api/v1/push
+          tls:
+            insecure: true
+          format: json
+          labels:
+            attributes:
+              service.name: "service_name"
+              service.version: "service_version"
+              deployment.environment: "deployment_environment"
+            resource:
+              container.name: "container_name"
+              k8s.pod.name: "pod_name"
+              k8s.namespace.name: "namespace_name"
+        debug:
+          verbosity: basic
+          sampling_initial: 2
+          sampling_thereafter: 500
+      extensions:
+        health_check:
+          endpoint: 0.0.0.0:13133
+        pprof:
+          endpoint: 0.0.0.0:1777
+        zpages:
+          endpoint: 0.0.0.0:55679
+        memory_ballast:
+          size_mib: 64
+      service:
+        extensions: [health_check, pprof, zpages, memory_ballast]
+        pipelines:
+          traces:
+            receivers: [otlp, jaeger, zipkin]
+            processors: [memory_limiter, resource, batch]
+            exporters: [otlp/tempo, debug]
+          metrics:
+            receivers: [otlp, prometheus]
+            processors: [memory_limiter, resource, batch]
+            exporters: [prometheusremotewrite/prometheus, debug]
+          logs:
+            receivers: [otlp]
+            processors: [memory_limiter, resource, batch]
+            exporters: [loki, debug]
+        telemetry:
+          metrics:
+            address: 0.0.0.0:8888
+          logs:
+            level: info
+    ports:
+      otlp:
+        enabled: true
+        containerPort: 4317
+        servicePort: 4317
+        hostPort: 4317
+        protocol: TCP
+      otlp-http:
+        enabled: true
+        containerPort: 4318
+        servicePort: 4318
+        hostPort: 4318
+        protocol: TCP
+      jaeger-grpc:
+        enabled: true
+        containerPort: 14250
+        servicePort: 14250
+        protocol: TCP
+      jaeger-thrift:
+        enabled: true
+        containerPort: 14268
+        servicePort: 14268
+        protocol: TCP
+      zipkin:
+        enabled: true
+        containerPort: 9411
+        servicePort: 9411
+        protocol: TCP
+      metrics:
+        enabled: true
+        containerPort: 8888
+        servicePort: 8888
+        protocol: TCP
+    service:
+      enabled: true
+      type: ClusterIP
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8888"
+        prometheus.io/path: "/metrics"
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      scrapeTimeout: 10s
+      path: /metrics
+      port: metrics
+    networkPolicy:
+      enabled: false
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8888"
+      prometheus.io/path: "/metrics"

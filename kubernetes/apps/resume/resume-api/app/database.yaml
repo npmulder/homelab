@@ -10,4 +10,3 @@ spec:
   owner: resume_api_user
   cluster:
     name: postgres
-    namespace: database

@@ -7,7 +7,7 @@ metadata:
 spec:
   instances: 3
   primaryUpdateStrategy: unsupervised
-  
+
   postgresql:
     parameters:
       max_connections: "400"
@@ -23,21 +23,21 @@ spec:
       min_wal_size: "1GB"
       max_wal_size: "4GB"
       ssl_min_protocol_version: "TLSv1.2"
-    
+
   bootstrap:
     initdb:
       database: postgres
       owner: postgres
       secret:
         name: postgres-credentials
-      
+
   storage:
     size: 20Gi
     storageClass: openebs-hostpath
-    
+
   monitoring:
-    enabled: true
-    
+    enablePodMonitor: true
+
   resources:
     requests:
       memory: "512Mi"
@@ -45,17 +45,14 @@ spec:
     limits:
       memory: "1Gi"
       cpu: "1000m"
-      
+
   affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
           - key: node-role.kubernetes.io/control-plane
             operator: DoesNotExist
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            cnpg.io/cluster: postgres
-        topologyKey: kubernetes.io/hostname

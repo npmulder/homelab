@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app resume-api
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      resume-api:
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/npmulder/resume-api
+              tag: main-8602c3c
+            env:
+              # Server Configuration
+              RESUME_API_SERVER_HOST: "0.0.0.0"
+              RESUME_API_SERVER_PORT: "8080"
+              READ_TIMEOUT: "15s"
+              WRITE_TIMEOUT: "15s"
+              IDLE_TIMEOUT: "60s"
+              GRACEFUL_STOP: "30s"
+              REQUEST_TIMEOUT: "10s"
+              
+              # Database Configuration
+              RESUME_API_DATABASE_HOST: "postgres-rw.database.svc.cluster.local"
+              RESUME_API_DATABASE_PORT: "5432"
+              RESUME_API_DATABASE_NAME: "resume_api"
+              RESUME_API_DATABASE_SSL_MODE: "disable"
+              
+              # Database Connection Pool
+              MAX_CONNECTIONS: "25"
+              MAX_IDLE_CONNECTIONS: "5"
+              CONN_MAX_LIFETIME: "1h"
+              CONN_MAX_IDLE_TIME: "30m"
+              
+              # Redis Configuration
+              RESUME_API_REDIS_HOST: "redis.database.svc.cluster.local"
+              RESUME_API_REDIS_PORT: "6379"
+              RESUME_API_REDIS_DB: "0"
+              RESUME_API_REDIS_TTL: "15m"
+              RESUME_API_REDIS_ENABLED: "true"
+              
+              # Logging Configuration
+              RESUME_API_LOGGING_LEVEL: "info"
+              RESUME_API_LOGGING_FORMAT: "json"
+              
+              # Telemetry Configuration
+              RESUME_API_TELEMETRY_ENABLED: "true"
+              RESUME_API_TELEMETRY_SERVICE_NAME: "resume-api"
+            envFrom:
+              - secretRef:
+                  name: resume-api-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+    service:
+      app:
+        controller: resume-api
+        ports:
+          http:
+            port: 8080
+    serviceMonitor:
+      app:
+        serviceName: resume-api
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    route:
+      app:
+        hostnames:
+          - resume-api.npmulder.dev
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https

@@ -13,7 +13,6 @@ resources:
   - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
-  - ./opentelemetry-collector/ks.yaml
   - ./promtail/ks.yaml
   - ./tempo/ks.yaml
   # - ./silence-operator/ks.yaml

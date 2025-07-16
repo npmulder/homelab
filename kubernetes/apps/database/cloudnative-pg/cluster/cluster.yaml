@@ -31,6 +31,9 @@ spec:
       secret:
         name: postgres-credentials
 
+  superuserSecret:
+    name: postgres-credentials
+
   storage:
     size: 20Gi
     storageClass: openebs-hostpath

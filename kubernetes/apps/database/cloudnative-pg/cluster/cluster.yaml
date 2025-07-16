@@ -36,7 +36,7 @@ spec:
 
   managed:
     roles:
-    - name: resume-api
+    - name: resume_api_user
       ensure: present
       login: true
       superuser: false

@@ -7,6 +7,6 @@ metadata:
   namespace: database
 spec:
   name: resume_api
-  owner: resume-api
+  owner: resume_api_user
   cluster:
     name: postgres

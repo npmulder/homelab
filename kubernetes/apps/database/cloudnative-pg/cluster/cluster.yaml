@@ -34,6 +34,15 @@ spec:
   superuserSecret:
     name: postgres-credentials
 
+  managed:
+    roles:
+    - name: resume-api
+      ensure: present
+      login: true
+      superuser: false
+      passwordSecret:
+        name: resume-api-db-credentials
+
   storage:
     size: 20Gi
     storageClass: openebs-hostpath

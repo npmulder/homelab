@@ -4,9 +4,9 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: resume-api
-  namespace: resume
+  namespace: database
 spec:
   name: resume_api
-  owner: resume_api_user
+  owner: resume-api
   cluster:
     name: postgres

@@ -78,15 +78,15 @@ spec:
     persistence:
       ollama:
         existingClaim: *app
-        globalMounts:
-          - path: *modelPath
-            subPath: models
-          - path: /root/.ollama
-            subPath: config
         advancedMounts:
           ollama:
             init-directories:
               - path: /data
+            app:
+              - path: *modelPath
+                subPath: models
+              - path: /root/.ollama
+                subPath: config
       dri:
         type: hostPath
         hostPath: /dev/dri

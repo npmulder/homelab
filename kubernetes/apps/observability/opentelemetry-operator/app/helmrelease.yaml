@@ -30,7 +30,7 @@ spec:
         tag: v0.129.1
       collectorImage:
         repository: otel/opentelemetry-collector-contrib
-        tag: 0.114.0
+        tag: 0.130.0
       resources:
         limits:
           memory: 256Mi

@@ -28,7 +28,7 @@ spec:
     replicaCount: 2
     image:
       repository: otel/opentelemetry-collector-contrib
-      tag: 0.113.0
+      tag: 0.130.0
     command:
       name: otelcol-contrib
     resources:

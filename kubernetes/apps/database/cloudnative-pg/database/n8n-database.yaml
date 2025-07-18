@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: resume-api
+  name: n8n
   namespace: database
 spec:
   name: n8n

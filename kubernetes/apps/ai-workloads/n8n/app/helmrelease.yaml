@@ -52,11 +52,11 @@ spec:
               N8N_HOST: &hostName automation.npmulder.dev
               N8N_LOG_LEVEL: debug
               N8N_LOG_OUTPUT: console
-              N8N_ENCRYPTION_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: n8n-secret
-                    key: N8N_ENCRYPTION_KEY
+              # N8N_ENCRYPTION_KEY:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: n8n-secret
+              #       key: N8N_ENCRYPTION_KEY
             resources:
               requests:
                 cpu: 5m

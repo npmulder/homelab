@@ -25,6 +25,15 @@ spec:
         replicas: 1 # 1 per node
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          init-directories:
+            image:
+              repository: busybox
+              tag: latest
+            command:
+              - /bin/sh
+              - -c
+              - mkdir -p /data/models /data/config && chmod 755 /data/models /data/config
         containers:
           app:
             image:
@@ -74,6 +83,10 @@ spec:
             subPath: models
           - path: /root/.ollama
             subPath: config
+        advancedMounts:
+          ollama:
+            init-directories:
+              - path: /data
       dri:
         type: hostPath
         hostPath: /dev/dri

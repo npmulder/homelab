@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./cluster.yaml
   - ./resume-api-secret.yaml
+  - ./n8n-secret.yaml

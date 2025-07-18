@@ -37,7 +37,7 @@ spec:
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: &hostName n8n.npmulder.dev
+              N8N_HOST: &hostName automation.npmulder.dev
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
             resources:
@@ -66,7 +66,7 @@ spec:
         hostnames:
           - *hostName
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https
 

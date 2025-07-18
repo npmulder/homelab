@@ -30,7 +30,7 @@ spec:
               tag: 1.103.1
             env:
               DB_TYPE: postgresdb
-              DB_POSTGRESDB_HOST: postgres-rw.database.svc.cluster.local:11434
+              DB_POSTGRESDB_HOST: postgres-rw.database.svc.cluster.local
               DB_POSTGRESDB_USER:
                 valueFrom:
                   secretKeyRef:

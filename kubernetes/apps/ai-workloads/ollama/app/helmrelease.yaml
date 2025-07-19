@@ -61,7 +61,7 @@ spec:
               requests:
                 cpu: 200m
               limits:
-                memory: 3Gi
+                memory: 6Gi
                 gpu.intel.com/xe: 1
     service:
       app:

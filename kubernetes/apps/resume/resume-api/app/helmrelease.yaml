@@ -38,30 +38,30 @@ spec:
               IDLE_TIMEOUT: "60s"
               GRACEFUL_STOP: "30s"
               REQUEST_TIMEOUT: "10s"
-              
+
               # Database Configuration
               RESUME_API_DATABASE_HOST: "postgres-rw.database.svc.cluster.local"
               RESUME_API_DATABASE_PORT: "5432"
               RESUME_API_DATABASE_NAME: "resume_api"
               RESUME_API_DATABASE_SSL_MODE: "disable"
-              
+
               # Database Connection Pool
               MAX_CONNECTIONS: "25"
               MAX_IDLE_CONNECTIONS: "5"
               CONN_MAX_LIFETIME: "1h"
               CONN_MAX_IDLE_TIME: "30m"
-              
+
               # Redis Configuration
               RESUME_API_REDIS_HOST: "redis.database.svc.cluster.local"
               RESUME_API_REDIS_PORT: "6379"
               RESUME_API_REDIS_DB: "0"
               RESUME_API_REDIS_TTL: "15m"
               RESUME_API_REDIS_ENABLED: "true"
-              
+
               # Logging Configuration
               RESUME_API_LOGGING_LEVEL: "info"
               RESUME_API_LOGGING_FORMAT: "json"
-              
+
               # Telemetry Configuration
               RESUME_API_TELEMETRY_ENABLED: "true"
               RESUME_API_TELEMETRY_SERVICE_NAME: "resume-api"
@@ -137,6 +137,6 @@ spec:
         hostnames:
           - resume-api.npmulder.dev
         parentRefs:
-          - name: external
+          - name: internal
             namespace: kube-system
             sectionName: https

@@ -19,6 +19,10 @@ spec:
   values:
     controllers:
       qbittorrent:
+        pod:
+          securityContext:
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
         containers:
           app:
             image:
@@ -49,9 +53,8 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              runAsUser: 568
+              runAsGroup: 568
             resources:
               requests:
                 cpu: 100m

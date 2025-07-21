@@ -51,6 +51,11 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: POSTGRES_PASSWORD
+              POSTGRES_DB:
+                valueFrom:
+                  secretKeyRef:
+                    name: maybe-secret
+                    key: POSTGRES_DB
               REDIS_URL: "redis://redis.database.svc.cluster.local:6379/1"
             securityContext:
               allowPrivilegeEscalation: false
@@ -96,6 +101,11 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: POSTGRES_PASSWORD
+              POSTGRES_DB:
+                valueFrom:
+                  secretKeyRef:
+                    name: maybe-secret
+                    key: POSTGRES_DB
               REDIS_URL: "redis://redis.database.svc.cluster.local:6379/1"
             securityContext:
               allowPrivilegeEscalation: false

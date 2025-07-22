@@ -1,0 +1,61 @@
+logging {
+	level    = "info"
+	format   = "json"
+}
+
+// OpenTelemetry OTLP receiver for logs, metrics, and traces
+otelcol.receiver.otlp "default" {
+	grpc {
+		endpoint = "0.0.0.0:4317"
+	}
+	http {
+		endpoint = "0.0.0.0:4318"
+	}
+
+	output {
+		metrics = [otelcol.processor.batch.default.input]
+		logs    = [otelcol.processor.batch.default.input]
+		traces  = [otelcol.processor.batch.default.input]
+	}
+}
+
+// Batch processor to improve performance
+otelcol.processor.batch "default" {
+	output {
+		metrics = [otelcol.exporter.prometheus.default.input]
+		logs    = [otelcol.exporter.loki.default.input]
+		traces  = [otelcol.exporter.otlp.tempo.input]
+	}
+}
+
+// Export metrics to Prometheus
+otelcol.exporter.prometheus "default" {
+	forward_to = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+	endpoint {
+		url = "http://prometheus.observability.svc.cluster.local:9090/api/v1/write"
+	}
+}
+
+// Export logs to Loki
+otelcol.exporter.loki "default" {
+	forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+	endpoint {
+		url = "http://loki-headless.observability.svc.cluster.local:3100/loki/api/v1/push"
+	}
+}
+
+// Export traces to Tempo
+otelcol.exporter.otlp "tempo" {
+	client {
+		endpoint = "http://tempo.observability.svc.cluster.local:4317"
+		tls {
+			insecure = true
+		}
+	}
+}

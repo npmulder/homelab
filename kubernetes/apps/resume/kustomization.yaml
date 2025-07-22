@@ -7,3 +7,4 @@ components:
   - ../../components/common
 resources:
   - ./resume-api/ks.yaml
+  - ./resume-website/ks.yaml

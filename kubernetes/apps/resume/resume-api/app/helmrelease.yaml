@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/resume-api
-              tag: main-8602c3c
+              tag: main-938610c
             env:
               # Server Configuration
               RESUME_API_SERVER_HOST: "0.0.0.0"
@@ -65,6 +65,10 @@ spec:
               # Telemetry Configuration
               RESUME_API_TELEMETRY_ENABLED: "true"
               RESUME_API_TELEMETRY_SERVICE_NAME: "resume-api"
+
+              # CORS Configuration
+              RESUME_API_CORS_ALLOW_ORIGINSL: http://localhost:3000,http://127.0.0.1:3000,https://resume.npmulder.dev
+              RESUME_API_CORS_ALLOW_METHODS: GET
             envFrom:
               - secretRef:
                   name: resume-api-secret

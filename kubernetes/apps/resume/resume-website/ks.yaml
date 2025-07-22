@@ -9,8 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: resume-namespace
   path: ./kubernetes/apps/resume/resume-website/app
   prune: true
   sourceRef:

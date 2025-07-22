@@ -59,7 +59,7 @@ spec:
         controller: resume-website
         ports:
           http:
-            port: 80
+            port: 8080
     route:
       app:
         hostnames:

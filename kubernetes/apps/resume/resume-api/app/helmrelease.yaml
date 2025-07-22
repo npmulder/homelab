@@ -65,6 +65,8 @@ spec:
               # Telemetry Configuration
               RESUME_API_TELEMETRY_ENABLED: "true"
               RESUME_API_TELEMETRY_SERVICE_NAME: "resume-api"
+              RESUME_API_TELEMETRY_EXPORTER_TYPE: otlp  # stdout, otlp
+              RESUME_API_TELEMETRY_EXPORTER_ENDPOINT: alloy.observability.svc.cluster.local:4317
 
               # CORS Configuration
               RESUME_API_CORS_ALLOW_ORIGINSL: http://localhost:3000,http://127.0.0.1:3000,https://resume.npmulder.dev

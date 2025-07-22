@@ -70,7 +70,7 @@ spec:
 
               # CORS Configuration
               RESUME_API_CORS_ALLOW_ORIGINSL: http://localhost:3000,http://127.0.0.1:3000,https://resume.npmulder.dev
-              RESUME_API_CORS_ALLOW_METHODS: GET
+              RESUME_API_CORS_ALLOW_METHODS: GET, OPTIONS
             envFrom:
               - secretRef:
                   name: resume-api-secret

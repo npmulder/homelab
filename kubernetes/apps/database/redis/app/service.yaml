@@ -16,4 +16,4 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: redis
-    app.kubernetes.io/component: master
+    app.kubernetes.io/component: node

@@ -32,13 +32,13 @@ spec:
       retries: 3
   values:
     deploymentMode: SingleBinary
-    metricsGenerator:
-      enabled: true
-      remoteWriteUrl: http://prometheus.observability.svc.cluster.local:9090/api/v1/write
     tempo:
       retention: 336h # 14 days
       global_overrides:
         max_bytes_per_tag_values_query: 5000000
+      metricsGenerator:
+        enabled: true
+        remoteWriteUrl: http://prometheus.observability.svc.cluster.local:9090/api/v1/write
       storage:
         trace:
           backend: local

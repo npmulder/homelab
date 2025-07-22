@@ -50,6 +50,20 @@ spec:
       compactor:
         compaction:
           block_retention: 336h # 14 days
+      metrics_generator:
+        enabled: true
+        ring:
+          kvstore:
+            store: memberlist
+        processor:
+          span_metrics:
+            enable_target_info: true
+          service_graphs:
+            enabled: true
+        storage:
+          path: /var/tempo/generator/wal
+          remote_write:
+            - url: http://prometheus.observability.svc.cluster.local:9090/api/v1/write
       distributor:
         receivers:
           otlp:

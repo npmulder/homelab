@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &app resume-api
 spec:
-  interval: 30m
+  interval: 5m
   chartRef:
     kind: OCIRepository
     name: app-template
@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/resume-api
-              tag: main-938610c
+              tag: latest
             env:
               # Server Configuration
               RESUME_API_SERVER_HOST: "0.0.0.0"

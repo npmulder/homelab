@@ -69,7 +69,7 @@ spec:
               RESUME_API_TELEMETRY_EXPORTER_ENDPOINT: alloy.observability.svc.cluster.local:4317
 
               # CORS Configuration
-              RESUME_API_CORS_ALLOW_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,https://resume.npmulder.dev
+              RESUME_API_CORS_ALLOW_ORIGINS: http://localhost:8080,http://127.0.0.1:3000,https://resume.npmulder.dev
               RESUME_API_CORS_ALLOW_METHODS: GET, OPTIONS
             envFrom:
               - secretRef:

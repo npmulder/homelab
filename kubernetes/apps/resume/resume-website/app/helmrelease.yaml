@@ -28,7 +28,13 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/neovim-resume
-              tag: sha-5cbc39c
+              tag: sha-3c65ba1
+            env:
+              VITE_GA_MEASUREMENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: resume-website-secret
+                    key: VITE_GA_MEASUREMENT_ID
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

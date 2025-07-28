@@ -5,6 +5,7 @@ kind: Cluster
 metadata:
   name: postgres
 spec:
+  enableSuperuserAccess: true
   instances: 3
   primaryUpdateStrategy: unsupervised
 

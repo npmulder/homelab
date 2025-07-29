@@ -65,6 +65,6 @@ spec:
         hostnames:
           - www.npmulder.dev
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https

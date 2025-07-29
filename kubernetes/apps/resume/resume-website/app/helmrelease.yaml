@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/neovim-resume
-              tag: sha-72e2809
+              tag: sha-4f07825
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -65,6 +65,6 @@ spec:
         hostnames:
           - www.npmulder.dev
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https

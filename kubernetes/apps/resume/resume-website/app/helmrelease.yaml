@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/npmulder/neovim-resume
-              tag: sha-1588d28
+              tag: sha-72e2809
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

@@ -37,7 +37,6 @@ spec:
               - --http-enabled=true
               - --http-port=8080
               - --hostname-strict=false
-              - --hostname-strict-https=false
               - --proxy-headers=xforwarded
               - --health-enabled=true
             env:

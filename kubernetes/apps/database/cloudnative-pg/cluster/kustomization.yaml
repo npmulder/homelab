@@ -8,3 +8,5 @@ resources:
   - ./resume-api-secret.yaml
   - ./n8n-secret.yaml
   - ./maybe-secret.yaml
+  - ./keycloak-secret.yaml
+  - ./revysr-dev-secret.yaml

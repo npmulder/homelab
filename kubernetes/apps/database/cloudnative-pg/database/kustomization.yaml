@@ -6,3 +6,5 @@ resources:
   - ./resume-api-database.yaml
   - ./n8n-database.yaml
   - ./maybe-database.yaml
+  - ./keycloak-database.yaml
+  - ./revysr-dev-database.yaml

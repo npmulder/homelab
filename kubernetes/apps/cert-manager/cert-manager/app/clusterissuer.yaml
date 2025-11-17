@@ -16,4 +16,4 @@ spec:
               name: cert-manager-secret
               key: api-token
         selector:
-          dnsZones: ["npmulder.dev"]
+          dnsZones: ["npmulder.dev","${APP_DEV_SECRET_DOMAIN}"]

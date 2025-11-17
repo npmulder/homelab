@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.118.1
+              tag: 1.120.3
             env:
               DB_TYPE: postgresdb
               DB_POSTGRESDB_HOST: postgres-rw.database.svc.cluster.local

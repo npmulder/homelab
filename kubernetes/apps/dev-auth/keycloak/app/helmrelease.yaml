@@ -38,7 +38,6 @@ spec:
               - --http-port=8080
               - --hostname-strict=false
               - --proxy-headers=xforwarded
-              - --health-enabled=true
             env:
               # Database Configuration
               KC_DB: postgres

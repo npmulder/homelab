@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: revysr_dev
+  name: revysr-dev
   namespace: database
 spec:
   name: revysr_dev

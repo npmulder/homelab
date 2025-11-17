@@ -33,11 +33,10 @@ spec:
               - /opt/keycloak/bin/kc.sh
             args:
               - start
-              - --optimized
               - --http-enabled=true
               - --http-port=8080
               - --hostname-strict=false
-              - --proxy-headers=xforwarded
+              - --proxy=edge
             env:
               # Database Configuration
               KC_DB: postgres

@@ -55,6 +55,18 @@ spec:
       superuser: false
       passwordSecret:
         name: maybe-db-credentials
+    - name: keycloak_user
+      ensure: present
+      login: true
+      superuser: false
+      passwordSecret:
+        name: keycloak-db-credentials
+    - name: revysr_dev_user
+      ensure: present
+      login: true
+      superuser: false
+      passwordSecret:
+        name: revysr-dev-db-credentials
 
   storage:
     size: 20Gi

@@ -33,7 +33,6 @@ spec:
             env:
               ASPNETCORE_URLS: http://+:8080
               ASPNETCORE_ENVIRONMENT: Production
-              YARP_CONFIG_PATH: /etc/yarp/appsettings.json
             probes:
               liveness:
                 enabled: true
@@ -101,7 +100,8 @@ spec:
         type: configMap
         name: yarp-configmap
         globalMounts:
-          - path: /etc/yarp
+          - path: /etc/yarp.config
+            subPath: appsettings.json
             readOnly: true
       tmp:
         type: emptyDir

@@ -90,7 +90,7 @@ spec:
     route:
       app:
         hostnames:
-          - "gateway.${APP_DEV_SECRET_DOMAIN}"
+          - "dev-gateway.${APP_DEV_SECRET_DOMAIN}"
         parentRefs:
           - name: app-dev-internal
             namespace: kube-system

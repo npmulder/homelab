@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app revysr-api
+spec:
+  interval: 5m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      revysr-api:
+        replicas: 1
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/codevannin/revysr/api
+              tag: main-0a0b6a5
+            env:
+              # ASP.NET Core Configuration
+              ASPNETCORE_URLS: http://+:8080
+              ASPNETCORE_ENVIRONMENT: Production
+
+              # Database Connection (PostgreSQL)
+              ConnectionStrings__Revysr:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-dev-db-credentials
+                    key: connection-string
+
+              # Redis Connection
+              ConnectionStrings__Cache: "redis.database.svc.cluster.local:6379"
+
+              # Keycloak Authentication Configuration
+              Authentication__Audience: "account"
+              Authentication__TokenValidationParameters__ValidIssuers__0: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr"
+              Authentication__MetadataAddress: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr/.well-known/openid-configuration"
+              Authentication__RequireHttpsMetadata: "false"
+
+              # Keycloak Admin Configuration
+              Users__KeyCloak__AdminUrl: "http://keycloak.dev-auth.svc.cluster.local:8080/admin/realms/revysr/"
+              Users__KeyCloak__TokenUrl: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr/protocol/openid-connect/token"
+              Users__KeyCloak__ConfidentialClientId: "revysr-confidential-client"
+              Users__KeyCloak__PublicClientId: "revysr-public-client"
+
+              # OpenTelemetry Configuration
+              OTEL_EXPORTER_OTLP_ENDPOINT: "http://alloy.observability.svc.cluster.local:4317"
+              OTEL_SERVICE_NAME: "revysr-api"
+              OTEL_TRACES_EXPORTER: "otlp"
+              OTEL_METRICS_EXPORTER: "otlp"
+              OTEL_LOGS_EXPORTER: "otlp"
+              OTEL_RESOURCE_ATTRIBUTES: "service.name=revysr-api,service.namespace=dev-app,deployment.environment=production"
+
+              # Keycloak Client Secret (from External Secret)
+              Users__KeyCloak__ConfidentialClientSecret:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-api-secret
+                    key: KEYCLOAK_CONFIDENTIAL_CLIENT_SECRET
+
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /alive
+                    port: 8080
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
+    service:
+      app:
+        controller: revysr-api
+        ports:
+          http:
+            port: 8080
+    persistence:
+      config:
+        type: configMap
+        name: revysr-api-configmap
+        globalMounts:
+          - path: /app/appsettings.Production.json
+            subPath: appsettings.json
+            readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+

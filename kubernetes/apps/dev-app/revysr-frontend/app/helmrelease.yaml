@@ -25,6 +25,20 @@ spec:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          copy-static-files:
+            image:
+              repository: ghcr.io/codevannin/revysr/web
+              tag: main-0a0b6a5
+            command:
+              - sh
+              - -c
+              - |
+                cp -r /usr/share/nginx/html/* /web-root/
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
         containers:
           app:
             image:
@@ -96,4 +110,12 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      web-root:
+        type: emptyDir
+        advancedMounts:
+          revysr-frontend:
+            copy-static-files:
+              - path: /web-root
+            app:
+              - path: /usr/share/nginx/html
 

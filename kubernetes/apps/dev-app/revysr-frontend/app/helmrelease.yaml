@@ -109,14 +109,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      nginx-cache:
-        type: emptyDir
-        globalMounts:
-          - path: /var/cache/nginx
-      nginx-run:
-        type: emptyDir
-        globalMounts:
-          - path: /var/run
       env-config:
         type: configMap
         name: revysr-frontend-env-config

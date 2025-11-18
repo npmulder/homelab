@@ -19,7 +19,7 @@ spec:
   wait: false
   interval: 30m
   retryInterval: 1m
-  timeout: 5m
+  timeout: 4m
   postBuild:
     substituteFrom:
       - name: cluster-secrets

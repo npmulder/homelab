@@ -52,7 +52,7 @@ spec:
 
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false  # Frontend needs to write .env.js for runtime config
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -96,8 +96,4 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /.cache
 

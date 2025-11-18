@@ -28,11 +28,12 @@ spec:
         containers:
           app:
             image:
-              repository: mcr.microsoft.com/dotnet/nightly/yarp  # Update with your YARP image
-              tag: 2.3.0-preview.4  # Update with your tag
+              repository: mcr.microsoft.com/dotnet/nightly/yarp
+              tag: 2.3.0-preview.4
             env:
               ASPNETCORE_URLS: http://+:8080
               ASPNETCORE_ENVIRONMENT: Production
+              YARP_CONFIG_PATH: /etc/yarp/appsettings.json
             probes:
               liveness:
                 enabled: true
@@ -100,8 +101,7 @@ spec:
         type: configMap
         name: yarp-configmap
         globalMounts:
-          - path: /app/appsettings.json
-            subPath: appsettings.json
+          - path: /etc/yarp
             readOnly: true
       tmp:
         type: emptyDir

@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: dev-app
 components:
   - ../../components/common
-  - ../../components/repos
 resources:
   - ./yarp/ks.yaml
   - ./revysr-api/ks.yaml

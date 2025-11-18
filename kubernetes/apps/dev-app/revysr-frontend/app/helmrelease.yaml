@@ -85,6 +85,9 @@ spec:
             port: 80
     route:
       app:
+        enabled: true
+        labels:
+          external-dns: enabled
         hostnames:
           - "dev.${APP_DEV_SECRET_DOMAIN}"
         parentRefs:

@@ -92,7 +92,7 @@ spec:
         hostnames:
           - "dev-gateway.${APP_DEV_SECRET_DOMAIN}"
         parentRefs:
-          - name: app-dev-internal
+          - name: app-dev-external
             namespace: kube-system
             sectionName: https
     persistence:

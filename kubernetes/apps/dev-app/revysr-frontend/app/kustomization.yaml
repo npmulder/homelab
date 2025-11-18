@@ -2,11 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: dev-app
-components:
-  - ../../components/common
 resources:
-  - ./yarp/ks.yaml
-  - ./revysr-api/ks.yaml
-  - ./revysr-frontend/ks.yaml
+  - ./helmrelease.yaml
 

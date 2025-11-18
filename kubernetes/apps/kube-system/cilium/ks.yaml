@@ -44,3 +44,7 @@ spec:
   targetNamespace: *namespace
   timeout: 15m
   wait: true
+  postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret

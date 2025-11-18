@@ -112,7 +112,7 @@ spec:
         hostnames:
           - "dev-keycloak.${APP_DEV_SECRET_DOMAIN}"
         parentRefs:
-          - name: internal
+          - name: app-dev-internal
             namespace: kube-system
             sectionName: https
 

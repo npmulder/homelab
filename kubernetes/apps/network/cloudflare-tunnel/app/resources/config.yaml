@@ -1,10 +1,19 @@
 ---
-originRequest:
-  originServerName: external.npmulder.dev
-
 ingress:
   - hostname: npmulder.dev
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
+    originRequest:
+      originServerName: external.npmulder.dev
   - hostname: "*.npmulder.dev"
     service: *svc
+    originRequest:
+      originServerName: external.npmulder.dev
+  - hostname: "${APP_DEV_SECRET_DOMAIN}"
+    service: &dev-svc https://cilium-gateway-app-dev-external.kube-system.svc.cluster.local
+    originRequest:
+      originServerName: app-dev-external.${APP_DEV_SECRET_DOMAIN}
+  - hostname: "*.${APP_DEV_SECRET_DOMAIN}"
+    service: *dev-svc
+    originRequest:
+      originServerName: app-dev-external.${APP_DEV_SECRET_DOMAIN}
   - service: http_status:404

@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: mcr.microsoft.com/dotnet/nightly/yarp
-              tag: 2.3.0-preview.4
+              tag: 2.3-preview
             env:
               ASPNETCORE_URLS: http://+:8080
               ASPNETCORE_ENVIRONMENT: Production

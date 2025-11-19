@@ -59,8 +59,9 @@ function apply_sops_secrets() {
 
     local -r secrets=(
         "${ROOT_DIR}/bootstrap/github-deploy-key.sops.yaml"
-        "${ROOT_DIR}/kubernetes/components/common/cluster-secrets.sops.yaml"
-        "${ROOT_DIR}/kubernetes/components/common/sops-age.sops.yaml"
+        "${ROOT_DIR}/kubernetes/components/common/sops/cluster-secrets.sops.yaml"
+        "${ROOT_DIR}/kubernetes/components/common/sops/secret.sops.yaml"
+        "${ROOT_DIR}/kubernetes/apps/external-secrets/external-secrets/app/onepassword-secret.sops.yaml"
     )
 
     for secret in "${secrets[@]}"; do
@@ -69,17 +70,23 @@ function apply_sops_secrets() {
             continue
         fi
 
+        # Determine namespace based on secret location
+        local namespace="flux-system"
+        if [[ "${secret}" == *"external-secrets"* ]]; then
+            namespace="external-secrets"
+        fi
+
         # Check if the secret resources are up-to-date
-        if sops exec-file "${secret}" "kubectl --namespace flux-system diff --filename {}" &>/dev/null; then
-            log info "Secret resource is up-to-date" "resource=$(basename "${secret}" ".sops.yaml")"
+        if sops exec-file "${secret}" "kubectl --namespace ${namespace} diff --filename {}" &>/dev/null; then
+            log info "Secret resource is up-to-date" "resource=$(basename "${secret}" ".sops.yaml") namespace=${namespace}"
             continue
         fi
 
         # Apply secret resources
-        if sops exec-file "${secret}" "kubectl --namespace flux-system apply --server-side --filename {}" &>/dev/null; then
-            log info "Secret resource applied successfully" "resource=$(basename "${secret}" ".sops.yaml")"
+        if sops exec-file "${secret}" "kubectl --namespace ${namespace} apply --server-side --filename {}" &>/dev/null; then
+            log info "Secret resource applied successfully" "resource=$(basename "${secret}" ".sops.yaml") namespace=${namespace}"
         else
-            log error "Failed to apply secret resource" "resource=$(basename "${secret}" ".sops.yaml")"
+            log error "Failed to apply secret resource" "resource=$(basename "${secret}" ".sops.yaml") namespace=${namespace}"
         fi
     done
 }
@@ -88,29 +95,31 @@ function apply_sops_secrets() {
 function apply_crds() {
     log debug "Applying CRDs"
 
-    local -r crds=(
-        # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-        https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.86.2/stripped-down-crds.yaml
-        # renovate: datasource=github-releases depName=kubernetes-sigs/external-dns
-        https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.20.0/docs/sources/crd/crd-manifest.yaml
-    )
+    local -r helmfile_file="${ROOT_DIR}/bootstrap/00-crds.yaml"
 
-    for crd in "${crds[@]}"; do
-        if kubectl diff --filename "${crd}" &>/dev/null; then
-            log info "CRDs are up-to-date" "crd=${crd}"
-            continue
-        fi
-        if kubectl apply --server-side --filename "${crd}" &>/dev/null; then
-            log info "CRDs applied" "crd=${crd}"
-        else
-            log error "Failed to apply CRDs" "crd=${crd}"
-        fi
-    done
+    if [[ ! -f "${helmfile_file}" ]]; then
+        log fatal "File does not exist" "file" "${helmfile_file}"
+    fi
+
+    if ! crds=$(helmfile --file "${helmfile_file}" template --quiet) || [[ -z "${crds}" ]]; then
+        log fatal "Failed to render CRDs from Helmfile" "file" "${helmfile_file}"
+    fi
+
+    if echo "${crds}" | kubectl diff --filename - &>/dev/null; then
+        log info "CRDs are up-to-date"
+        return
+    fi
+
+    if ! echo "${crds}" | kubectl apply --server-side --filename - &>/dev/null; then
+        log fatal "Failed to apply crds from Helmfile" "file" "${helmfile_file}"
+    fi
+
+    log info "CRDs applied successfully"
 }
 
-# Apply Helm releases using helmfile
-function apply_helm_releases() {
-    log debug "Applying Helm releases with helmfile"
+# Sync Helm releases
+function sync_helm_releases() {
+    log debug "Syncing Helm releases"
 
     local -r helmfile_file="${ROOT_DIR}/bootstrap/helmfile.yaml"
 
@@ -118,14 +127,15 @@ function apply_helm_releases() {
         log error "File does not exist" "file=${helmfile_file}"
     fi
 
-    if ! helmfile --file "${helmfile_file}" apply --hide-notes --skip-diff-on-install --suppress-diff --suppress-secrets; then
-        log error "Failed to apply Helm releases"
+    if ! helmfile --file "${helmfile_file}" sync --hide-notes; then
+        log error "Failed to sync Helm releases"
     fi
 
-    log info "Helm releases applied successfully"
+    log info "Helm releases synced successfully"
 }
 
 function main() {
+    check_env KUBECONFIG TALOSCONFIG
     check_cli helmfile kubectl kustomize sops talhelper yq
 
     # Apply resources and Helm releases
@@ -133,7 +143,7 @@ function main() {
     apply_namespaces
     apply_sops_secrets
     apply_crds
-    apply_helm_releases
+    sync_helm_releases
 
     log info "Congrats! The cluster is bootstrapped and Flux is syncing the Git repository"
 }

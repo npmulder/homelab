@@ -9,6 +9,6 @@ spec:
     - dnsName: "external.npmulder.dev"
       recordType: CNAME
       targets: ["f2e031e4-78e8-405b-81ac-079424e6c1cd.cfargotunnel.com"]
-    - dnsName: "app-dev-external.${APP_DEV_SECRET_DOMAIN}"
+    - dnsName: "external.${APP_DEV_SECRET_DOMAIN}"
       recordType: CNAME
       targets: ["f2e031e4-78e8-405b-81ac-079424e6c1cd.cfargotunnel.com"]

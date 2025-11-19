@@ -59,7 +59,6 @@ spec:
 
               # OpenTelemetry Configuration
               OTEL_EXPORTER_OTLP_ENDPOINT: "http://alloy.observability.svc.cluster.local:4317"
-              OTEL_SERVICE_NAME: "revysr-api"
               OTEL_TRACES_EXPORTER: "otlp"
               OTEL_METRICS_EXPORTER: "otlp"
               OTEL_LOGS_EXPORTER: "otlp"

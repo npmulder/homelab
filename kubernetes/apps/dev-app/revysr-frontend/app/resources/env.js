@@ -5,6 +5,6 @@ window.__ENV__ = {
   VITE_KEYCLOAK_URL: 'https://dev-gateway.${APP_DEV_SECRET_DOMAIN}',
   VITE_KEYCLOAK_REALM: 'revysr',
   VITE_KEYCLOAK_CLIENT_ID: 'revysr-public-client',
-  VITE_SIGNALR_HUB_URL: 'https://dev-gateway.${APP_DEV_SECRET_DOMAIN}/api/hubs'
+  VITE_SIGNALR_HUB_URL: 'https://dev-gateway.${APP_DEV_SECRET_DOMAIN}/hubs'
 };
 

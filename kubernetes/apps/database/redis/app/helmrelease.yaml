@@ -39,28 +39,9 @@ spec:
         limits:
           memory: 1024Mi
     replica:
-      persistence:
-        enabled: false
-      resources:
-        requests:
-          cpu: 500m
-          memory: 512Mi
-        limits:
-          memory: 1024Mi
+      replicaCount: 0
     sentinel:
-      enabled: true
-      masterSet: redis-master
-      getMasterTimeout: 90
-      startupProbe:
-        failureThreshold: 10
-      persistence:
-        enabled: false
-      resources:
-        requests:
-          cpu: 500m
-          memory: 512Mi
-        limits:
-          memory: 1024Mi
+      enabled: false
     metrics:
       enabled: true
       serviceMonitor:

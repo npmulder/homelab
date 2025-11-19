@@ -47,7 +47,7 @@ spec:
 
               # Keycloak Authentication Configuration
               Authentication__Audience: "account"
-              Authentication__TokenValidationParameters__ValidIssuers__0: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr"
+              Authentication__TokenValidationParameters__ValidIssuers__0: "http://dev-gateway.revysr.com/realms/revysr"
               Authentication__MetadataAddress: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr/.well-known/openid-configuration"
               Authentication__RequireHttpsMetadata: "false"
 

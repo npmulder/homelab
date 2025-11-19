@@ -33,6 +33,14 @@ spec:
             env:
               ASPNETCORE_URLS: http://+:8080
               ASPNETCORE_ENVIRONMENT: Production
+
+              # OpenTelemetry Configuration
+              OTEL_EXPORTER_OTLP_ENDPOINT: "http://alloy.observability.svc.cluster.local:4317"
+              OTEL_SERVICE_NAME: "yarp-gateway"
+              OTEL_TRACES_EXPORTER: "otlp"
+              OTEL_METRICS_EXPORTER: "otlp"
+              OTEL_LOGS_EXPORTER: "otlp"
+              OTEL_RESOURCE_ATTRIBUTES: "service.name=yarp-gateway,service.namespace=dev-app,deployment.environment=production"
             probes:
               liveness:
                 enabled: true

@@ -45,7 +45,7 @@ spec:
               VITE_KEYCLOAK_URL: "https://dev-gateway.${APP_DEV_SECRET_DOMAIN}"
               VITE_KEYCLOAK_REALM: "revysr"
               VITE_KEYCLOAK_CLIENT_ID: "revysr-public-client"
-              VITE_SIGNALR_HUB_URL: "https://dev-gateway.${APP_DEV_SECRET_DOMAIN}/api/hubs"
+              VITE_SIGNALR_HUB_URL: "https://dev-gateway.${APP_DEV_SECRET_DOMAIN}/hubs"
 
               # Analytics (Optional - can be configured via secret if needed)
               VITE_PUBLIC_POSTHOG_HOST: "https://eu.i.posthog.com"

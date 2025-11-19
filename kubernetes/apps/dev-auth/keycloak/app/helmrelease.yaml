@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: quay.io/keycloak/keycloak
-              tag: 26.0.7
+              tag: 26.4.5
             command:
               - /opt/keycloak/bin/kc.sh
             args:

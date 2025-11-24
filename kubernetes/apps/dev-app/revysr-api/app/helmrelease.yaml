@@ -43,7 +43,7 @@ spec:
                     key: connection-string
 
               # Redis Connection
-              ConnectionStrings__Cache: "redis.database.svc.cluster.local:6379"
+              ConnectionStrings__Cache: "redis-master.database.svc.cluster.local:6379,abortConnect=false"
 
               # Keycloak Authentication Configuration
               Authentication__Audience: "account"

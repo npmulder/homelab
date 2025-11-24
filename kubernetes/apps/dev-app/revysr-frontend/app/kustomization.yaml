@@ -14,4 +14,19 @@ configMapGenerator:
       - default.conf=./resources/nginx.conf
 generatorOptions:
   disableNameSuffixHash: true
+replacements:
+  - source:
+      kind: Secret
+      name: revysr-frontend-secrets
+      fieldPath: stringData.VITE_PUBLIC_POSTHOG_KEY
+    targets:
+      - select:
+          kind: ConfigMap
+          name: revysr-frontend-env-config
+        fieldPaths:
+          - data[.env.js]
+        options:
+          delimiter: '${VITE_PUBLIC_POSTHOG_KEY}'
+          index: 0
+          create: false
 

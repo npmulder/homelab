@@ -18,7 +18,7 @@ replacements:
   - source:
       kind: Secret
       name: revysr-frontend-secrets
-      fieldPath: stringData.VITE_PUBLIC_POSTHOG_KEY
+      fieldPath: data.VITE_PUBLIC_POSTHOG_KEY
     targets:
       - select:
           kind: ConfigMap

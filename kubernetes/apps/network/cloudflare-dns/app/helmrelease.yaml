@@ -45,9 +45,7 @@ spec:
       - --cloudflare-proxied
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
-      - --gateway-name=external
-      - --gateway-name=app-dev-external
-      - --gateway-namespace=kube-system
+      - --gateway-label-filter=external-dns=enabled
       # Zone ID filter removed - will manage all zones the API token has access to
     triggerLoopOnEvent: true
     policy: sync

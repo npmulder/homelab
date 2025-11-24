@@ -99,6 +99,9 @@ spec:
           - name: app-dev-external
             namespace: kube-system
             sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
     persistence:
       tmp:
         type: emptyDir

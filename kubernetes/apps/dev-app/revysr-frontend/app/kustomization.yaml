@@ -4,10 +4,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./helmrelease.yaml
+  - ./externalsecret.yaml
 configMapGenerator:
   - name: revysr-frontend-env-config
     files:
       - .env.js=./resources/env.js
+  - name: revysr-frontend-nginx-config
+    files:
+      - default.conf=./resources/nginx.conf
 generatorOptions:
   disableNameSuffixHash: true
 

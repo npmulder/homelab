@@ -29,11 +29,11 @@ spec:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/web
-              tag: main-a2a7777
+              tag: main-16b869e
             env:
               # Node Configuration
               NODE_ENV: "production"
-              PORT: "80"
+              PORT: "8080"
 
               # Gateway Service URLs (Runtime Config)
               services__gateway_http_0: "http://yarp.dev-app.svc.cluster.local:8080"
@@ -47,8 +47,13 @@ spec:
               VITE_KEYCLOAK_CLIENT_ID: "revysr-public-client"
               VITE_SIGNALR_HUB_URL: "https://dev-gateway.${APP_DEV_SECRET_DOMAIN}/hubs"
 
-              # Analytics (Optional - can be configured via secret if needed)
+              # Analytics
               VITE_PUBLIC_POSTHOG_HOST: "https://eu.i.posthog.com"
+              VITE_PUBLIC_POSTHOG_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-frontend-secrets
+                    key: VITE_PUBLIC_POSTHOG_KEY
 
             securityContext:
               allowPrivilegeEscalation: false
@@ -82,7 +87,7 @@ spec:
         controller: revysr-frontend
         ports:
           http:
-            port: 80
+            port: 8080
     route:
       app:
         enabled: true
@@ -107,11 +112,22 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/run
+      nginx-log:
+        type: emptyDir
+        globalMounts:
+          - path: /var/log/nginx
       env-config:
         type: configMap
         name: revysr-frontend-env-config
         globalMounts:
           - path: /usr/share/nginx/html/.env.js
             subPath: .env.js
+            readOnly: true
+      nginx-config:
+        type: configMap
+        name: revysr-frontend-nginx-config
+        globalMounts:
+          - path: /etc/nginx/conf.d/default.conf
+            subPath: default.conf
             readOnly: true
 

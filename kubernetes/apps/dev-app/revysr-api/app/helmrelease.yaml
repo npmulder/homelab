@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/api
-              tag: main-0a0b6a5
+              tag: main-c76b1b5
             env:
               # ASP.NET Core Configuration
               ASPNETCORE_URLS: http://+:8080
@@ -47,7 +47,7 @@ spec:
 
               # Keycloak Authentication Configuration
               Authentication__Audience: "account"
-              Authentication__TokenValidationParameters__ValidIssuers__0: "http://dev-gateway.revysr.com/realms/revysr"
+              Authentication__TokenValidationParameters__ValidIssuers__0: "http://dev-gateway.${APP_DEV_SECRET_DOMAIN}/realms/revysr"
               Authentication__MetadataAddress: "http://keycloak.dev-auth.svc.cluster.local:8080/realms/revysr/.well-known/openid-configuration"
               Authentication__RequireHttpsMetadata: "false"
 
@@ -71,30 +71,46 @@ spec:
                     name: revysr-api-secret
                     key: KEYCLOAK_CONFIDENTIAL_CLIENT_SECRET
 
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /alive
-            #         port: 8080
-            #       initialDelaySeconds: 30
-            #       periodSeconds: 30
-            #       timeoutSeconds: 10
-            #       failureThreshold: 3
-            #   readiness: *probes
-            #   startup:
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /health
-            #         port: 8080
-            #       initialDelaySeconds: 0
-            #       periodSeconds: 5
-            #       timeoutSeconds: 5
-            #       failureThreshold: 30
+              Subscription__Freemius__ProductId:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-api-secret
+                    key: FREEMIUS_PRODUCT_ID
+              Subscription__Freemius__SecretKey:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-api-secret
+                    key: FREEMIUS_SECRET_KEY
+              Subscription__Freemius__Auth:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-api-secret
+                    key: FREEMIUS_AUTH
+
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /alive
+                    port: 8080
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -140,4 +156,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-

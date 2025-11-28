@@ -18,6 +18,7 @@ spec:
       checkpoint_completion_target: "0.9"
       wal_buffers: "16MB"
       wal_level: "logical"
+      max_wal_senders: "30"
       default_statistics_target: "100"
       random_page_cost: "1.1"
       effective_io_concurrency: "200"

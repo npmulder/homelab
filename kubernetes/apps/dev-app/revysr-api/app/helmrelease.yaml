@@ -28,7 +28,7 @@ spec:
         initContainers:
           migrate:
             image:
-              repository: revysr/migrations
+              repository: ghcr.io/codevannin/revysr/migrations
               tag: main-f18f997
             env:
               ConnectionStrings__revysr:

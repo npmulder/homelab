@@ -35,12 +35,12 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: revysr-dev-db-credentials
-                    key: connection-string-migration
+                    key: connection-string
         containers:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/api
-              tag: main-c76b1b5
+              tag: main-f18f997
             env:
               # ASP.NET Core Configuration
               ASPNETCORE_URLS: http://+:8080

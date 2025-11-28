@@ -29,7 +29,7 @@ spec:
           migrate:
             image:
               repository: ghcr.io/codevannin/revysr/migrations
-              tag: main-f18f997
+              tag: main-e212d6f
             env:
               ConnectionStrings__revysr:
                 valueFrom:

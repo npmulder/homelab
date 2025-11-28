@@ -8,3 +8,4 @@ resources:
   - ./maybe-database.yaml
   - ./keycloak-database.yaml
   - ./revysr-dev-database.yaml
+  - ./revysr-database.yaml

@@ -66,6 +66,7 @@ spec:
       ensure: present
       login: true
       superuser: false
+      replication: true
       passwordSecret:
         name: revysr-dev-db-credentials
 

@@ -31,7 +31,7 @@ spec:
     remediation:
       retries: 3
   values:
-    githubConfigUrl: {{ .APP_DEV_GITHUB_REPO }}
+    githubConfigUrl: ${APP_DEV_GITHUB_REPO}
     githubConfigSecret: home-ops-runner-secret
     minRunners: 1
     maxRunners: 3

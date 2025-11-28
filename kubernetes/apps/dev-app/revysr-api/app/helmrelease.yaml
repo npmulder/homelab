@@ -25,6 +25,17 @@ spec:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          migrate:
+            image:
+              repository: revysr/migrations
+              tag: main-f18f997
+            env:
+              ConnectionStrings__revysr:
+                valueFrom:
+                  secretKeyRef:
+                    name: revysr-dev-db-credentials
+                    key: connection-string-migration
         containers:
           app:
             image:

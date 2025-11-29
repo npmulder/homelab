@@ -7,8 +7,6 @@ metadata:
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
-  trigger:
-    manual: restore-once
   restic:
     repository: "${APP}-volsync-secret"
     copyMethod: Direct

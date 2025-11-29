@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/v1/service.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: actions-runner-controller-metrics
+  labels:
+    app.kubernetes.io/name: gha-rs-controller
+    app.kubernetes.io/instance: actions-runner-controller
+spec:
+  ports:
+    - name: metrics
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app.kubernetes.io/instance: actions-runner-controller
+    app.kubernetes.io/name: gha-rs-controller
+    app.kubernetes.io/namespace: actions-runner-system

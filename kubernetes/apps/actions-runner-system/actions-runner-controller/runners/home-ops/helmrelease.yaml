@@ -64,6 +64,9 @@ spec:
                 mountPath: /var/run
           - name: dind
             image: docker:dind
+            env:
+              - name: DOCKER_TLS_CERTDIR
+                value: ""
             securityContext:
               privileged: true
             volumeMounts:

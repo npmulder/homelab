@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/api
-              tag: main-f18f997
+              tag: main-c56acb9
             env:
               # ASP.NET Core Configuration
               ASPNETCORE_URLS: http://+:8080

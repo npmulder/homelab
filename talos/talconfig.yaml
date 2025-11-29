@@ -20,18 +20,18 @@ cniConfig:
 
 nodes:
   - hostname: "talos-cp-01"
-    ipAddress: "10.1.2.122"
-    installDisk: "/dev/sda"
+    ipAddress: "10.1.2.51"
+    installDisk: "/dev/nvme0n1"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/928a729469980b05d25454eebe170944dc579b83a3e06d732a0f3acf44f8b562
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:30:87:ba"
+          hardwareAddr: "04:92:26:d5:6b:2e"
         dhcp: false
         addresses:
-          - "10.1.2.122/24"
+          - "10.1.2.51/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.1.2.1"
@@ -39,7 +39,7 @@ nodes:
         vip:
           ip: "10.1.2.20"
   - hostname: "talos-cp-02"
-    ipAddress: "10.1.2.152"
+    ipAddress: "10.1.2.52"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
@@ -50,7 +50,7 @@ nodes:
           hardwareAddr: "bc:24:11:64:cf:1c"
         dhcp: false
         addresses:
-          - "10.1.2.152/24"
+          - "10.1.2.52/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.1.2.1"
@@ -58,7 +58,7 @@ nodes:
         vip:
           ip: "10.1.2.20"
   - hostname: "talos-cp-03"
-    ipAddress: "10.1.2.101"
+    ipAddress: "10.1.2.53"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
@@ -69,7 +69,7 @@ nodes:
           hardwareAddr: "bc:24:11:a2:88:c4"
         dhcp: false
         addresses:
-          - "10.1.2.101/24"
+          - "10.1.2.53/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.1.2.1"

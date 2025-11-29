@@ -59,10 +59,23 @@ spec:
                 value: "false"
               - name: DOCKER_HOST
                 value: tcp://localhost:2375
+              - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2SUPPORT
+                value: "false"
+              - name: NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS
+                value: "300"
+              - name: NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS
+                value: "300"
               - name: NODE
                 valueFrom:
                   fieldRef:
                     fieldPath: status.hostIP
+            resources:
+              requests:
+                cpu: 500m
+                memory: 512Mi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
             volumeMounts:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
@@ -76,11 +89,11 @@ spec:
                 value: ""
             resources:
               requests:
-                cpu: 100m
-                memory: 256Mi
+                cpu: 500m
+                memory: 512Mi
               limits:
-                cpu: 2000m
-                memory: 2Gi
+                cpu: 4000m
+                memory: 4Gi
         serviceAccountName: *name
         volumes:
           - name: talos

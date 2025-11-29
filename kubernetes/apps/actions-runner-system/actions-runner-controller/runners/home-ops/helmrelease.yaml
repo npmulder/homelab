@@ -39,6 +39,18 @@ spec:
     maxRunners: 3
     containerMode:
       type: "kubernetes"
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: openebs-hostpath
+        resources:
+          requests:
+            storage: 10Gi
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:latest
+            command: ["/home/runner/run.sh"]

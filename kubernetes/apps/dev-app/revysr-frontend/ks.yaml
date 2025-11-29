@@ -24,6 +24,4 @@ spec:
     substituteFrom:
       - name: cluster-secrets
         kind: Secret
-      - name: revysr-frontend-secrets
-        kind: Secret
 

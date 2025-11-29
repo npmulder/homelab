@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: resume
 components:
   - ../../components/common
-resources:
-  - ./resume-api/ks.yaml
-  - ./resume-website/ks.yaml
+# resources:
+#   - ./resume-api/ks.yaml
+#   - ./resume-website/ks.yaml

@@ -40,33 +40,3 @@ spec:
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
-    template:
-      spec:
-        containers:
-          - name: runner
-            image: ghcr.io/home-operations/actions-runner:2.330.0
-            env:
-              - name: DOCKER_HOST
-                value: unix:///var/run/docker.sock
-            volumeMounts:
-              - name: work
-                mountPath: /home/runner/_work
-              - name: dind-sock
-                mountPath: /var/run
-          - name: dind
-            image: docker:dind
-            env:
-              - name: DOCKER_TLS_CERTDIR
-                value: ""
-            securityContext:
-              privileged: true
-            volumeMounts:
-              - name: work
-                mountPath: /home/runner/_work
-              - name: dind-sock
-                mountPath: /var/run
-        volumes:
-          - name: work
-            emptyDir: {}
-          - name: dind-sock
-            emptyDir: {}

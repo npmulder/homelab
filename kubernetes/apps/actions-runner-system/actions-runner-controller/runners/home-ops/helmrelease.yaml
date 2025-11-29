@@ -17,7 +17,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name home-ops-runner
+  name: home-ops-runner
 spec:
   interval: 1h
   chartRef:
@@ -53,11 +53,3 @@ spec:
                 value: "300"
               - name: NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS
                 value: "300"
-            volumeMounts:
-              - mountPath: /var/run/secrets/talos.dev
-                name: talos
-                readOnly: true
-        volumes:
-          - name: talos
-            secret:
-              secretName: *name

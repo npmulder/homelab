@@ -38,18 +38,7 @@ spec:
     minRunners: 1
     maxRunners: 3
     containerMode:
-      type: dind
+      type: "kubernetes"
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system
-    template:
-      spec:
-        containers:
-          - name: runner
-            env:
-              - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2SUPPORT
-                value: "false"
-              - name: NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS
-                value: "300"
-              - name: NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS
-                value: "300"

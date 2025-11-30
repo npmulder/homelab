@@ -97,7 +97,7 @@ spec:
         initContainers:
           - name: init-chmod-data
             image: busybox:latest
-            command: ['sh', '-c', 'chmod -R 777 /prometheus']
+            command: ['sh', '-c', 'mkdir -p /prometheus/prometheus-db && chmod -R 777 /prometheus']
             volumeMounts:
               - name: prometheus-kube-prometheus-stack-db
                 mountPath: /prometheus

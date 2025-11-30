@@ -29,7 +29,7 @@ spec:
           migrate:
             image:
               repository: ghcr.io/codevannin/revysr/migrations
-              tag: main-5eb3952
+              tag: main-094a7ab
             env:
               ConnectionStrings__revysr:
                 valueFrom:
@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/api
-              tag: main-5eb3952
+              tag: main-094a7ab
             env:
               # ASP.NET Core Configuration
               ASPNETCORE_URLS: http://+:8080

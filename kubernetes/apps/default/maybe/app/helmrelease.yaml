@@ -39,7 +39,7 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: SECRET_KEY_BASE
-              DB_HOST: "postgres-rw.database.svc.cluster.local"
+              DB_HOST: "postgres-lb.database.svc.cluster.local"
               DB_PORT: "5432"
               POSTGRES_USER:
                 valueFrom:
@@ -56,7 +56,7 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: POSTGRES_DB
-              REDIS_URL: "redis://redis.database.svc.cluster.local:6379/1"
+              REDIS_URL: "redis://redis-lb.database.svc.cluster.local:6379/1"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
@@ -89,7 +89,7 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: SECRET_KEY_BASE
-              DB_HOST: "postgres-rw.database.svc.cluster.local"
+              DB_HOST: "postgres-lb.database.svc.cluster.local"
               DB_PORT: "5432"
               POSTGRES_USER:
                 valueFrom:
@@ -106,7 +106,7 @@ spec:
                   secretKeyRef:
                     name: maybe-secret
                     key: POSTGRES_DB
-              REDIS_URL: "redis://redis.database.svc.cluster.local:6379/1"
+              REDIS_URL: "redis://redis-lb.database.svc.cluster.local:6379/1"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false

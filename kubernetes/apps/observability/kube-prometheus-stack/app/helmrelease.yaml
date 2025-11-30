@@ -38,6 +38,16 @@ spec:
         forceConflicts: true
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
+      initContainers:
+          - name: init-chmod-data
+            image: busybox:latest
+            command: ['sh', '-c', 'mkdir -p /prometheus/prometheus-db && chmod -R 777 /prometheus']
+            volumeMounts:
+              - name: prometheus-kube-prometheus-stack-db
+                mountPath: /prometheus
+            securityContext:
+              runAsNonRoot: false
+              runAsUser: 0
       route:
         main:
           enabled: true

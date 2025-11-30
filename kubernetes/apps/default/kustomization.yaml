@@ -15,7 +15,7 @@ resources:
   - ./jellyseerr/ks.yaml
   - ./maintainerr/ks.yaml
   # - ./maybe/ks.yaml
-  - ./mosquitto/ks.yaml
+  # - ./mosquitto/ks.yaml
   - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   # - ./qbittorrent/ks.yaml

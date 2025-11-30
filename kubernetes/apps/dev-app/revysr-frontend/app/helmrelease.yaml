@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/codevannin/revysr/web
-              tag: main-bb4f86d
+              tag: main-5eb3952
             env:
               # Node Configuration
               NODE_ENV: "production"

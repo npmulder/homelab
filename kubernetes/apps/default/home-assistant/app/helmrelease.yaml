@@ -75,6 +75,13 @@ spec:
         existingClaim: home-assistant-cache
         globalMounts:
           - path: /config/.venv
+      http-config:
+        type: configMap
+        name: home-assistant-http-config
+        globalMounts:
+          - path: /config/http.yaml
+            subPath: http.yaml
+            readOnly: true
       tmpfs:
         type: emptyDir
         advancedMounts:

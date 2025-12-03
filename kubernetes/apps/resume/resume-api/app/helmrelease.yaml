@@ -52,7 +52,7 @@ spec:
               CONN_MAX_IDLE_TIME: "30m"
 
               # Redis Configuration
-              RESUME_API_REDIS_HOST: "redis-lb.database.svc.cluster.local"
+              RESUME_API_REDIS_HOST: "redis-headless.database.svc.cluster.local"
               RESUME_API_REDIS_PORT: "6379"
               RESUME_API_REDIS_DB: "0"
               RESUME_API_REDIS_TTL: "15m"

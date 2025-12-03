@@ -143,6 +143,6 @@ spec:
         hostnames:
           - resume-api.npmulder.dev
         parentRefs:
-          - name: internal
+          - name: external
             namespace: kube-system
             sectionName: https

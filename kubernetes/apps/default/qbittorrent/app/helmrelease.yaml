@@ -64,7 +64,7 @@ spec:
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.1
+              tag: v3.41.0
             env:
               VPN_SERVICE_PROVIDER: nordvpn
               VPN_TYPE: openvpn

@@ -48,7 +48,7 @@ releases:
   - name: onepassword-connect
     namespace: external-secrets
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
-    version: 4.4.0
+    version: 4.6.2
     values: ['{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/external-secrets/onepassword/app/helm/values.yaml']
     needs: ['external-secrets/external-secrets']
 

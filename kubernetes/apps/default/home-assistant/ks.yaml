@@ -11,9 +11,6 @@ spec:
       app.kubernetes.io/name: *app
   components:
     - ../../../../components/gatus/external
-  dependsOn:
-    - name: mosquitto
-      namespace: default
   interval: 1h
   path: ./kubernetes/apps/default/home-assistant/app
   postBuild:

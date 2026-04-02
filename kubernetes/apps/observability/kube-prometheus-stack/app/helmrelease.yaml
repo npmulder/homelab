@@ -58,7 +58,7 @@ spec:
           routes:
             - receiver: "null"
               matchers:
-                - alertname = Watchdog
+                - alertname = "Watchdog"
             - receiver: discord
               matchers:
                 - severity =~ "critical|warning"
@@ -84,9 +84,9 @@ spec:
                   {{ end }}
         inhibit_rules:
           - source_matchers:
-              - severity = critical
+              - severity = "critical"
             target_matchers:
-              - severity = warning
+              - severity = "warning"
             equal: ["namespace", "alertname"]
       alertmanagerSpec:
         externalUrl: https://alertmanager.npmulder.dev

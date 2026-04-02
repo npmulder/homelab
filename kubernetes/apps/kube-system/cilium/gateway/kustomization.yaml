@@ -7,5 +7,3 @@ resources:
   - ./external.yaml
   - ./internal.yaml
   - ./redirect.yaml
-  - ./app-dev-internal.yaml
-  - ./app-dev-external.yaml

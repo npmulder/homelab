@@ -52,7 +52,7 @@ spec:
     sources: ["crd", "gateway-httproute"]
     txtOwnerId: default
     txtPrefix: k8s.
-    domainFilters: ["npmulder.dev", "${APP_DEV_SECRET_DOMAIN}"]
+    domainFilters: ["npmulder.dev"]
     serviceMonitor:
       enabled: true
     podAnnotations:

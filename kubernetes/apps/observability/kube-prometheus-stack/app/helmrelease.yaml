@@ -46,8 +46,52 @@ spec:
             - name: internal
               namespace: kube-system
               sectionName: https
+      config:
+        global:
+          resolve_timeout: 5m
+        route:
+          receiver: discord
+          group_by: ["namespace", "alertname"]
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 12h
+          routes:
+            - receiver: "null"
+              matchers:
+                - alertname = "Watchdog"
+            - receiver: discord
+              matchers:
+                - severity =~ "critical|warning"
+              continue: true
+        receivers:
+          - name: "null"
+          - name: discord
+            slack_configs:
+              - send_resolved: true
+                api_url_file: /etc/alertmanager/secrets/alertmanager-discord-webhook-secret/webhook-url
+                channel: "#alerts"
+                title: |-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+                text: >-
+                  {{ range .Alerts }}
+                    *Alert:* {{ .Labels.alertname }} - {{ .Labels.severity }}
+
+                    *Description:* {{ if .Annotations.description }}{{ .Annotations.description }}{{ else }}{{ .Annotations.summary }}{{ end }}
+
+                    *Details:*
+                    {{ range .Labels.SortedPairs }} - *{{ .Name }}:* {{ .Value }}
+                    {{ end }}
+                  {{ end }}
+        inhibit_rules:
+          - source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
+            equal: ["namespace", "alertname"]
       alertmanagerSpec:
         externalUrl: https://alertmanager.npmulder.dev
+        secrets:
+          - alertmanager-discord-webhook-secret
         storage:
           volumeClaimTemplate:
             spec:

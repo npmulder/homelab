@@ -5,6 +5,3 @@ kind: Kustomization
 resources:
   - ./resume-api-database.yaml
   - ./maybe-database.yaml
-  - ./keycloak-database.yaml
-  - ./revysr-dev-database.yaml
-  - ./revysr-database.yaml

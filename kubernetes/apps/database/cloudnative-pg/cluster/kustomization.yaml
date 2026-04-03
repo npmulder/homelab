@@ -7,5 +7,3 @@ resources:
   - ./service.yaml
   - ./resume-api-secret.yaml
   - ./maybe-secret.yaml
-  - ./keycloak-secret.yaml
-  - ./revysr-dev-secret.yaml

@@ -52,3 +52,11 @@ radarr:
             - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
             - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
             - f537cf427b64c38c8e36298f657e4828 # Scene
+
+    # Score override: neutralize x265 (no HDR/DV) penalty on SQP-1 (2160p)
+    custom_formats:
+      - trash_ids:
+          - 839bea857ed2c0a8e084f3cbdbd65ecb # x265 (no HDR/DV)
+        assign_scores_to:
+          - trash_id: 5128baeb2b081b72126bc8482b2a86a0 # SQP-1 (2160p)
+            score: 0

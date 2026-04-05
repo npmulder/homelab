@@ -12,3 +12,40 @@ spec:
     staticConfig:
       static:
         - TheDome.internal:2049
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: network-icmp
+spec:
+  interval: 1m
+  module: icmp
+  prober:
+    url: blackbox-exporter.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      labels:
+        probe_group: network-infrastructure
+      static:
+        - 10.1.2.1   # UDR7 router / default gateway
+        - 10.1.2.5   # Pi-hole DNS
+        - 10.1.2.11  # TheDome storage
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: network-tcp
+spec:
+  interval: 1m
+  module: tcp_connect
+  prober:
+    url: blackbox-exporter.observability.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      labels:
+        probe_group: network-infrastructure
+      static:
+        - 10.1.2.22:443  # Internal ingress (HTTPS)
+        - 10.1.2.21:443  # External ingress / CF Tunnel (HTTPS)

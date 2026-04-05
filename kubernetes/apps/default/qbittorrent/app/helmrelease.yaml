@@ -144,7 +144,7 @@ spec:
       media:
         type: nfs
         server: TheDome.internal
-        path: /Media
+        path: /nfs/Media
         globalMounts:
           - path: /media/Downloads/qbittorrent
             subPath: Downloads/qbittorrent

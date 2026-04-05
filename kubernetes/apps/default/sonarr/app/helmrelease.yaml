@@ -95,7 +95,7 @@ spec:
       media:
         type: nfs
         server: TheDome.internal
-        path: /mnt/Data/Media
+        path: /Media
         globalMounts:
           - path: /media
       tmp:

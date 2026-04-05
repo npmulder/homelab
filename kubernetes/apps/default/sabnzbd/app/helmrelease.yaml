@@ -90,7 +90,7 @@ spec:
         existingClaim: sabnzbd
       media:
         type: nfs
-        server: truenas.internal
+        server: TheDome.internal
         path: /mnt/Data/Media
         globalMounts:
           - path: /media/Downloads/sabnzbd

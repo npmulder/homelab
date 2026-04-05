@@ -11,4 +11,4 @@ spec:
   targets:
     staticConfig:
       static:
-        - truenas.internal:2049
+        - TheDome.internal:2049

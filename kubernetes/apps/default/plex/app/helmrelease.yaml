@@ -119,7 +119,7 @@ spec:
           - path: /config/Library/Application Support/Plex Media Server/Cache
       media:
         type: nfs
-        server: truenas.internal
+        server: TheDome.internal
         path: /mnt/Data/Media
         globalMounts:
           - path: /media

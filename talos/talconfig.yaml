@@ -1,0 +1,93 @@
+---
+clusterName: kubernetes
+
+talosVersion: "${talosVersion}"
+kubernetesVersion: "${kubernetesVersion}"
+
+endpoint: https://10.20.0.10:6443
+additionalApiServerCertSans: &sans
+  - "127.0.0.1"
+  - "10.20.0.10"
+additionalMachineCertSans: *sans
+
+clusterPodNets: ["10.42.0.0/16"]
+clusterSvcNets: ["10.43.0.0/16"]
+
+# Disable built-in CNI to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "talos-01"
+    ipAddress: "10.20.0.31"
+    installDiskSelector:
+      serial: "26030243611002254"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "38:05:25:37:a7:93"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.20.0.31/24"
+            mtu: 1500
+            routes:
+              - gateway: "10.20.0.1"
+                network: 0.0.0.0/0
+            vip:
+              ip: "10.20.0.10"
+  - hostname: "talos-02"
+    ipAddress: "10.20.0.32"
+    installDiskSelector:
+      serial: "26030243611002374"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "38:05:25:37:a7:af"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.20.0.32/24"
+            mtu: 1500
+            routes:
+              - gateway: "10.20.0.1"
+                network: 0.0.0.0/0
+  - hostname: "talos-03"
+    ipAddress: "10.20.0.33"
+    installDiskSelector:
+      serial: "S4EVNF0M473268F"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "04:92:26:d5:6b:2e"
+        vlans:
+          - vlanId: 20
+            addresses:
+              - "10.20.0.33/24"
+            mtu: 1500
+            routes:
+              - gateway: "10.20.0.1"
+                network: 0.0.0.0/0
+
+# Global patches
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@./patches/controller/cluster.yaml"
+

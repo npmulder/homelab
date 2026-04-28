@@ -29,35 +29,35 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "38:05:25:37:a7:93"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.20.0.31/24"
-            mtu: 1500
-            routes:
-              - gateway: "10.20.0.1"
-                network: 0.0.0.0/0
-            vip:
-              ip: "10.20.0.10"
+        dhcp: false
+        addresses:
+          - "10.20.0.31/24"
+        routes:
+          - gateway: "10.20.0.1"
+            network: 0.0.0.0/0
+        mtu: 1500
+        vip:
+          ip: "10.20.0.10"
   - hostname: "talos-02"
-    ipAddress: "10.20.0.32"
+    ipAddress: "10.20.0.150"
     installDiskSelector:
       serial: "26030243611002374"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
-    controlPlane: false
+    controlPlane: true
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "38:05:25:37:a7:af"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.20.0.32/24"
-            mtu: 1500
-            routes:
-              - gateway: "10.20.0.1"
-                network: 0.0.0.0/0
+        dhcp: false
+        addresses:
+          - "10.20.0.32/24"
+        routes:
+          - gateway: "10.20.0.1"
+            network: 0.0.0.0/0
+        mtu: 1500
+        vip:
+          ip: "10.20.0.10"
   - hostname: "talos-03"
     ipAddress: "10.20.0.33"
     installDiskSelector:
@@ -65,18 +65,19 @@ nodes:
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
-    controlPlane: false
+    controlPlane: true
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "04:92:26:d5:6b:2e"
-        vlans:
-          - vlanId: 20
-            addresses:
-              - "10.20.0.33/24"
-            mtu: 1500
-            routes:
-              - gateway: "10.20.0.1"
-                network: 0.0.0.0/0
+        dhcp: false
+        addresses:
+          - "10.20.0.33/24"
+        routes:
+          - gateway: "10.20.0.1"
+            network: 0.0.0.0/0
+        mtu: 1500
+        vip:
+          ip: "10.20.0.10"
 
 # Global patches
 patches:

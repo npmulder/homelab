@@ -18,7 +18,7 @@ spec:
     alertmanager:
       config:
         route:
-          receiver: pushover
+          receiver: blackhole
           repeat_interval: 12h
           routes:
             - receiver: blackhole

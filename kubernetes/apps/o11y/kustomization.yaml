@@ -2,8 +2,11 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: o11y
+
+components:
+  - ../../components/alerts
+
 resources:
-  # - ./grafanadashboard.yaml
-  - ./helmrelease.yaml
-  - ./ocirepository.yaml
-  - ./pdb.yaml
+  - ./namespace.yaml
+  # - ./grafana/ks.yaml

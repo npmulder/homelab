@@ -38,8 +38,14 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.20.0.10"
+      - deviceSelector:
+          hardwareAddr: "38:05:25:37:a7:90"
+        dhcp: false
+        addresses:
+          - "10.100.0.31/24"
+        mtu: 9000
   - hostname: "talos-02"
-    ipAddress: "10.20.0.150"
+    ipAddress: "10.20.0.32"
     installDiskSelector:
       serial: "26030243611002374"
     machineSpec:
@@ -58,6 +64,12 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.20.0.10"
+      - deviceSelector:
+          hardwareAddr: "38:05:25:37:a7:ac"
+        dhcp: false
+        addresses:
+          - "10.100.0.32/24"
+        mtu: 9000
   - hostname: "talos-03"
     ipAddress: "10.20.0.33"
     installDiskSelector:
@@ -78,6 +90,12 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.20.0.10"
+      - deviceSelector:
+          hardwareAddr: "c4:62:37:09:9e:34"
+        dhcp: false
+        addresses:
+          - "10.100.0.33/24"
+        mtu: 9000
 
 # Global patches
 patches:

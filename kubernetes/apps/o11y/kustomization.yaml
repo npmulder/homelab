@@ -11,4 +11,5 @@ components:
 resources:
   - ./namespace.yaml
   - ./victoria-metrics/ks.yaml
+  - ./victoria-logs/ks.yaml
   # - ./grafana/ks.yaml

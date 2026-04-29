@@ -10,6 +10,8 @@ components:
 
 resources:
   - ./namespace.yaml
-  - ./victoria-metrics/ks.yaml
+  - ./grafana/ks.yaml
+  - ./prometheus-adapter/ks.yaml
+  - ./prometheus-operator-crds/ks.yaml
   - ./victoria-logs/ks.yaml
-  # - ./grafana/ks.yaml
+  - ./victoria-metrics/ks.yaml

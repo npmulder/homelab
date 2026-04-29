@@ -3,20 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: victoria-metrics
+  name: grafana-operator
 spec:
   chartRef:
     kind: OCIRepository
-    name: victoria-metrics
+    name: grafana-operator
   interval: 1h
   values:
-    fullnameOverride: victoria-metrics
-    global:
-      image:
-        registry: quay.io
-    crds:
+    dashboard:
       enabled: true
-    operator:
-      enable_converter_ownership: true
     serviceMonitor:
       enabled: true

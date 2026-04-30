@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: lan-icmp
+spec:
+  module: icmp
+  prober:
+    url: blackbox-exporter-lan.o11y.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        # Talos / Kubernetes nodes
+        - 10.20.0.31 # talos-01
+        - 10.20.0.32 # talos-02
+        - 10.20.0.33 # talos-03
+        # Infrastructure
+        - 10.20.0.21 # proxmox / pihole
+        - 10.20.0.15 # nas (mycloud-ex2-ultra)
+        - 10.20.0.158 # paperclip (k3s)
+        # Smart home
+        - 10.20.0.149 # home-assistant
+        - 10.20.0.153 # tado
+        - 10.20.0.133 # homematic (symphony)
+        # Network
+        - 10.10.0.6 # dream-router
+        - 10.10.0.5 # tp-link-switch
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter-lan
+      action: replace
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: lan-nfs
+spec:
+  jobName: nfs_probe
+  module: tcp_connect
+  prober:
+    url: blackbox-exporter-lan.o11y.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - 10.20.0.15:2049 # nas (mycloud-ex2-ultra)
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter-lan
+      action: replace
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/probe_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: lan-slzb
+spec:
+  jobName: slzb_probe
+  module: icmp
+  prober:
+    url: blackbox-exporter-lan.o11y.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - 10.1.2.213 # slzb-mr3u (zigbee coordinator)
+  metricRelabelings:
+    - targetLabel: service
+      replacement: blackbox-exporter-lan
+      action: replace

@@ -12,3 +12,4 @@ resources:
   - ./echo/ks.yaml
   - ./bazarr/ks.yaml
   - ./plex/ks.yaml
+  - ./seerr/ks.yaml

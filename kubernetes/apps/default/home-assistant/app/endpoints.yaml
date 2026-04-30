@@ -6,7 +6,7 @@ metadata:
   namespace: default
 subsets:
   - addresses:
-      - ip: 10.20.0.149
+      - ip: 10.20.0.20
     ports:
       - name: http
         port: 8123

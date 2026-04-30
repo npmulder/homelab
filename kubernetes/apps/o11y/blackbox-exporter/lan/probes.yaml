@@ -18,14 +18,9 @@ spec:
         # Infrastructure
         - 10.20.0.21 # proxmox / pihole
         - 10.20.0.15 # nas (mycloud-ex2-ultra)
-        - 10.20.0.158 # paperclip (k3s)
-        # Smart home
-        - 10.20.0.149 # home-assistant
-        - 10.20.0.153 # tado
-        - 10.20.0.133 # homematic (symphony)
         # Network
-        - 10.10.0.6 # dream-router
-        - 10.10.0.5 # tp-link-switch
+        - 10.10.0.6
+        - 10.10.0.5
   metricRelabelings:
     - targetLabel: service
       replacement: blackbox-exporter-lan

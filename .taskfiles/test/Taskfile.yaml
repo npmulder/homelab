@@ -1,0 +1,11 @@
+---
+version: '3'
+
+tasks:
+
+  volsync:
+    desc: Run end-to-end VolSync test (write -> snapshot -> destroy -> restore -> verify)
+    cmd: bash {{.ROOT_DIR}}/tests/volsync/test.sh {{.CLI_ARGS}}
+    preconditions:
+      - test -f {{.KUBECONFIG}}
+      - which kubectl yq

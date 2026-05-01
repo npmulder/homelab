@@ -10,7 +10,7 @@ components:
 resources:
   - ./namespace.yaml
   - ./echo/ks.yaml
-  - ./home-assistant/ks.yaml
+  - ./home-assistant-external/ks.yaml
   - ./bazarr/ks.yaml
   - ./plex/ks.yaml
   - ./seerr/ks.yaml

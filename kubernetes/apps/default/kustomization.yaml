@@ -29,5 +29,5 @@ resources:
   - ./seasonpackerr/ks.yaml
   - ./seerr/ks.yaml
   - ./sonarr/ks.yaml
-  # - ./tautulli/ks.yaml
+  - ./tautulli/ks.yaml
   - ./zigbee/ks.yaml

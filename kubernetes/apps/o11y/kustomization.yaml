@@ -10,6 +10,7 @@ components:
 
 resources:
   - ./namespace.yaml
+  - ./gatus/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./grafana/ks.yaml
   - ./prometheus-adapter/ks.yaml

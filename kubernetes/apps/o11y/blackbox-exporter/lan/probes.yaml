@@ -58,7 +58,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - 10.1.2.213 # slzb-mr3u (zigbee coordinator)
+        - 10.30.0.20 # slzb-mr3u (zigbee coordinator)
   metricRelabelings:
     - targetLabel: service
       replacement: blackbox-exporter-lan

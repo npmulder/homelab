@@ -55,7 +55,7 @@ spec:
             conditions: ["[STATUS] == 200"]
         hostnames:
           - "{{ .Release.Name }}.${SECRET_DOMAIN}"
-          # - hass.${SECRET_DOMAIN}
+          - hass.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-external
             namespace: network

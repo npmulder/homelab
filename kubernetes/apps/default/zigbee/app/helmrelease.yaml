@@ -46,7 +46,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
               ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL: 11
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: "20"
-              # DEBUG: "zigbee-herdsman*"
+              DEBUG: "zigbee-herdsman*"
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"

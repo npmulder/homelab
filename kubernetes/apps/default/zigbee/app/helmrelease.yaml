@@ -45,7 +45,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://10.30.0.20:7638
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
               ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL: 11
-              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: "9"
+              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: "20"
               DEBUG: "zigbee-herdsman*"
             envFrom:
               - secretRef:

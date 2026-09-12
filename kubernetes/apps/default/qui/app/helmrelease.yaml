@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/autobrr/qui
-              tag: v1.19.0@sha256:baa07db5326f75f8c2246703603cbe2132476c8ad0ab31c976a960cb4c4731f5
+              tag: v1.29.0@sha256:263c131adb007be98469959d5d3625e88476417c900519a1abad0bd609f0f103
             env:
               QUI__AUTH_DISABLED: true
               QUI__I_ACKNOWLEDGE_THIS_IS_A_BAD_IDEA: true

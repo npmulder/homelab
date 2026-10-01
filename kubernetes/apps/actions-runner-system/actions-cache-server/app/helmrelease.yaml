@@ -45,9 +45,26 @@ spec:
     persistentVolumeClaim:
       storageClassName: ceph-block
       storage: 50Gi
+    # The image runs a single Node worker, and while it streams multi-GiB
+    # caches that worker blocks for seconds at a time: it forces a full GC
+    # after every part and writes SQLite synchronously to Ceph. With the chart's
+    # 1s probe timeout the kubelet killed it mid-upload, which abandoned the
+    # entry and sent the next job back to GitHub. The liveness probe now only
+    # catches a process wedged for minutes, and readiness tolerates a stall
+    # instead of dropping the only endpoint.
+    livenessProbe:
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 6
+    readinessProbe:
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 6
     resources:
       requests:
-        cpu: 100m
+        # Chart default. It shares nodes with the cv-ops runners, and 100m
+        # gave it little CPU share while they were busy.
+        cpu: 500m
         memory: 256Mi
       limits:
         memory: 2Gi

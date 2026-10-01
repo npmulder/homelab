@@ -21,7 +21,7 @@ spec:
     runnerLabels:
       - codevannin-actions-runners
     minRunners: 1
-    maxRunners: 3
+    maxRunners: 6
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: actions-runner-system

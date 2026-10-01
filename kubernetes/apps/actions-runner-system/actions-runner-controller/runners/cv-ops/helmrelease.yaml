@@ -1,0 +1,156 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  # The release name is the scale set name that CodeVannin workflows target
+  # with `runs-on: cv-ops-runner`.
+  name: &name cv-ops-runner
+spec:
+  chartRef:
+    kind: OCIRepository
+    # Shared with home-ops (runners/home-ops/ocirepository.yaml).
+    name: gha-runner-scale-set
+  interval: 1h
+  # Runner pods take a few minutes to register. The default 5m timeout
+  # aborts the upgrade while that is still in progress.
+  timeout: 10m
+  values:
+    githubConfigUrl: https://github.com/CodeVannin
+    githubConfigSecret: cv-ops-runner-secret
+    runnerLabels:
+      - codevannin-actions-runners
+    minRunners: 1
+    maxRunners: 3
+    controllerServiceAccount:
+      name: actions-runner-controller
+      namespace: actions-runner-system
+    template:
+      spec:
+        serviceAccountName: *name
+        automountServiceAccountToken: false
+        # Default ndots is 5. Artifact hosts such as
+        # productionresultssa0.blob.core.windows.net have fewer dots, so the
+        # resolver tries cluster search domains first and upload-artifact
+        # fails with ENOTFOUND.
+        dnsConfig:
+          options:
+            - name: ndots
+              value: "1"
+        # Group 123 is docker; the runner user is a member. fsGroup makes the
+        # scratch volume writable for it.
+        securityContext:
+          fsGroup: 123
+          fsGroupChangePolicy: OnRootMismatch
+        # One runner per node so concurrent builds don't share a node's CPU.
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: runner
+                app.kubernetes.io/name: *name
+        initContainers:
+          - name: init-dind-externals
+            image: ghcr.io/actions/actions-runner:2.337.0
+            command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+            volumeMounts:
+              - name: scratch
+                mountPath: /home/runner/tmpDir
+                subPath: externals
+          - name: dind
+            image: docker:dind
+            args:
+              - dockerd
+              - --host=unix:///var/run/docker.sock
+              - --group=$(DOCKER_GROUP_GID)
+            env:
+              - name: DOCKER_GROUP_GID
+                value: "123"
+            securityContext:
+              privileged: true
+            restartPolicy: Always
+            resources:
+              requests:
+                cpu: 500m
+                memory: 512Mi
+              limits:
+                cpu: 4
+                memory: 8Gi
+            startupProbe:
+              exec:
+                command:
+                  - docker
+                  - info
+              initialDelaySeconds: 0
+              failureThreshold: 24
+              periodSeconds: 5
+            volumeMounts:
+              - name: scratch
+                mountPath: /home/runner/_work
+                subPath: work
+              - name: dind-sock
+                mountPath: /var/run
+              - name: scratch
+                mountPath: /home/runner/externals
+                subPath: externals
+              - name: scratch
+                mountPath: /var/lib/docker
+                subPath: docker
+        containers:
+          - name: runner
+            image: ghcr.io/actions/actions-runner:2.337.0
+            command: ["/home/runner/run.sh"]
+            env:
+              - name: DOCKER_HOST
+                value: unix:///var/run/docker.sock
+              - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
+                value: "120"
+              - name: DOTNET_INSTALL_DIR
+                value: /home/runner/.dotnet
+              - name: DOTNET_ROOT
+                value: /home/runner/.dotnet
+            # Runner plus dind tops out at 8 cores and 16Gi, about half of the
+            # smallest node, so a build can't starve the rest of the cluster.
+            resources:
+              requests:
+                cpu: 1
+                memory: 1Gi
+                ephemeral-storage: 1Gi
+              limits:
+                cpu: 4
+                memory: 8Gi
+                ephemeral-storage: 4Gi
+            volumeMounts:
+              - name: scratch
+                mountPath: /home/runner/_work
+                subPath: work
+              - name: dind-sock
+                mountPath: /var/run
+              # setup-dotnet installs the SDK here and NuGet caches packages
+              # under .nuget and .local. Keep them off the node's system disk.
+              - name: scratch
+                mountPath: /home/runner/.dotnet
+                subPath: dotnet
+              - name: scratch
+                mountPath: /home/runner/.nuget
+                subPath: nuget
+              - name: scratch
+                mountPath: /home/runner/.local
+                subPath: local
+        volumes:
+          # Per-pod Ceph volume, created with the pod and deleted with it, for
+          # workspace, SDKs, package caches and docker data.
+          - name: scratch
+            ephemeral:
+              volumeClaimTemplate:
+                spec:
+                  accessModes: ["ReadWriteOnce"]
+                  storageClassName: ceph-block
+                  resources:
+                    requests:
+                      storage: 30Gi
+          - name: dind-sock
+            emptyDir:
+              sizeLimit: 1Gi

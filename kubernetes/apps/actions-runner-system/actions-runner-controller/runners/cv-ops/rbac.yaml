@@ -1,0 +1,7 @@
+---
+# CodeVannin CI only builds and tests; it needs no access to this cluster.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cv-ops-runner
+automountServiceAccountToken: false

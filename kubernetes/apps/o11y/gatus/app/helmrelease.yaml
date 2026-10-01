@@ -69,6 +69,7 @@ spec:
               accessMode: ReadWriteOnce
               size: 5Gi
     defaultPodOptions:
+      automountServiceAccountToken: true # gatus-sidecar needs in-cluster API access
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000

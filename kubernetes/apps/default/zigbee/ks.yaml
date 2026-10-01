@@ -16,7 +16,7 @@ spec:
   postBuild:
     substitute:
       APP: zigbee
-      ZEROSCALER_JOB_NAME: slzb_ultima_probe
+      ZEROSCALER_JOB_NAME: slzb_probe
     substituteFrom:
       - name: cluster-secrets
         kind: Secret

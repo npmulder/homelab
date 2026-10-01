@@ -23,6 +23,23 @@ spec:
         urlPrefix: /
         ssl: false
         prometheusEndpoint: http://vmsingle-victoria-metrics-cluster.o11y.svc.cluster.local:8428
+      # Ceph 20.2.4+ flags legacy "aes" cephx daemon keys as HEALTH_ERR; rotate them to aes256k.
+      # CSI + rbd-mirror keys must stay "aes" until all nodes run Linux kernel 7.0+.
+      # https://rook.io/docs/rook/v1.20/Storage-Configuration/Advanced/cephx-key-rotation/
+      security:
+        cephx:
+          daemon:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+          csi:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+            keepPriorKeyCountMax: 1
+            keyType: aes
+          rbdMirrorPeer:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+            keyType: aes
       mgr:
         modules:
           - name: pg_autoscaler

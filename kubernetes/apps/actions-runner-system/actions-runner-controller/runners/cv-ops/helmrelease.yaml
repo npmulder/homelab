@@ -53,7 +53,7 @@ spec:
                 app.kubernetes.io/name: *name
         initContainers:
           - name: init-dind-externals
-            image: ghcr.io/actions/actions-runner:2.337.0
+            image: ghcr.io/actions/actions-runner:2.338.0
             command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
             volumeMounts:
               - name: scratch
@@ -100,7 +100,7 @@ spec:
                 subPath: docker
         containers:
           - name: runner
-            image: ghcr.io/actions/actions-runner:2.337.0
+            image: ghcr.io/actions/actions-runner:2.338.0
             # The runner overwrites ACTIONS_RESULTS_URL with GitHub's URL for
             # every job. Renaming the variable it writes (ACTIONS_RESULTS_URL ->
             # ACTIONS_RESULTS_ORL, as UTF-16 in Runner.Worker.dll) leaves the

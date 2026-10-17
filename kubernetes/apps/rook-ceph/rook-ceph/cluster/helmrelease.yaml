@@ -9,6 +9,8 @@ spec:
     kind: OCIRepository
     name: rook-ceph-cluster
   interval: 1h
+  # CephCluster changes roll OSDs one at a time (ok-to-stop + recovery between each); 5m default is too short
+  timeout: 15m
   values:
     cephClusterSpec:
       cleanupPolicy:
@@ -67,9 +69,6 @@ spec:
           - name: talos-02
             devices:
               - name: /dev/nvme0n1
-          - name: talos-03
-            devices:
-              - name: /dev/sda
     monitoring:
       enabled: true
       createPrometheusRules: true
@@ -89,8 +88,11 @@ spec:
       - name: ceph-blockpool
         spec:
           failureDomain: host
+          # Only talos-01/02 hold OSDs. min_size 1 lets one OSD stop (upgrades, reboots) without blocking I/O.
           replicated:
-            size: 3
+            size: 2
+          parameters:
+            min_size: "1"
         storageClass:
           enabled: true
           name: ceph-block
@@ -123,12 +125,16 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 3
+              size: 2
+            parameters:
+              min_size: "1"
           dataPools:
             - name: data0
               failureDomain: host
               replicated:
-                size: 3
+                size: 2
+              parameters:
+                min_size: "1"
           metadataServer:
             activeCount: 1
             activeStandby: true

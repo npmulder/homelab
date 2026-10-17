@@ -67,6 +67,9 @@ spec:
           - name: talos-02
             devices:
               - name: /dev/nvme0n1
+          - name: talos-03
+            devices:
+              - name: /dev/sda
     monitoring:
       enabled: true
       createPrometheusRules: true
@@ -87,9 +90,7 @@ spec:
         spec:
           failureDomain: host
           replicated:
-            size: 2
-          parameters:
-            min_size: "2"
+            size: 3
         storageClass:
           enabled: true
           name: ceph-block
@@ -122,16 +123,12 @@ spec:
         spec:
           metadataPool:
             replicated:
-              size: 2
-            parameters:
-              min_size: "2"
+              size: 3
           dataPools:
             - name: data0
               failureDomain: host
               replicated:
-                size: 2
-              parameters:
-                min_size: "2"
+                size: 3
           metadataServer:
             activeCount: 1
             activeStandby: true

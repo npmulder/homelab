@@ -15,6 +15,7 @@ spec:
         - 10.20.0.31 # talos-01
         - 10.20.0.32 # talos-02
         - 10.20.0.33 # talos-03
+        - 10.20.0.34 # talos-04
         # Infrastructure
         - 10.20.0.21 # proxmox / pihole
         - 10.20.0.15 # nas (mycloud-ex2-ultra)

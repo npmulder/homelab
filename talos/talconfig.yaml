@@ -117,6 +117,26 @@ nodes:
           kernel:
             modules:
               - name: i915
+  # Proxmox VM on pve-pulse: etcd + Ceph mon quorum member, runs workloads, no OSD (no 10.100 storage NIC)
+  - hostname: "talos-04"
+    ipAddress: "10.20.0.34"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "bc:24:11:bd:b4:8f"
+        dhcp: false
+        addresses:
+          - "10.20.0.34/24"
+        routes:
+          - gateway: "10.20.0.1"
+            network: 0.0.0.0/0
+        mtu: 1500
+        vip:
+          ip: "10.20.0.10"
 
 # Global patches
 patches:

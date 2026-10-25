@@ -10,12 +10,22 @@ spec:
     version: v1.13.10
   policy:
     rebootMode: powercycle
-  # healthChecks:
+  healthChecks:
+    # Pools run 2 replicas / min_size 1, so the next node must not reboot until
+    # Ceph has recovered from the last one. HEALTH_OK is unreachable while the
+    # insecure-key and TOO_FEW_OSDS warnings stand, so gate on specific codes.
+    - apiVersion: ceph.rook.io/v1
+      kind: CephCluster
+      name: rook-ceph
+      namespace: rook-ceph
+      timeout: 30m
+      expr: |-
+        has(status.ceph) && status.ceph.health != 'HEALTH_ERR' &&
+        (!has(status.ceph.details) || !status.ceph.details.exists(k, k in [
+          'OSD_DOWN', 'OSD_HOST_DOWN', 'MON_DOWN',
+          'PG_AVAILABILITY', 'PG_DEGRADED', 'PG_DAMAGED', 'OBJECT_UNFOUND'
+        ]))
   #   - apiVersion: volsync.backube/v1alpha1
   #     kind: ReplicationSource
   #     expr: |-
   #       status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
-  #   - apiVersion: ceph.rook.io/v1
-  #     kind: CephCluster
-  #     expr: |-
-  #       status.ceph.health in ['HEALTH_OK']
